@@ -1,0 +1,3 @@
+.fuse*
+!schedule.sh
+!supervisord.conf

@@ -1,0 +1,29 @@
+services:
+  app:
+    container_name: a2odev-chat-app
+    build: .
+    image: a2odev-chat:latest
+    restart: always
+    ports:
+      - ${DC_APP_HOST:-80}:80
+    volumes:
+        - app_data:/data
+        - ./:/var/www/html
+    depends_on:
+        - db
+
+  db:
+    container_name: a2odev-chat-db
+    image: mariadb:${DC_MARIADB_VERSION:-11.3.2}
+    restart: always
+    ports:
+      - ${DC_DB_HOST:-127.0.0.1:3306}:3306
+    environment:
+      - MYSQL_DATABASE=${DC_DB_DATABASE:-a2odev-chat}
+      - MYSQL_ROOT_PASSWORD=${DC_DB_PASSWORD:-root}
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+  app_data:
