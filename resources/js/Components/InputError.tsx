@@ -1,6 +1,6 @@
-import { HTMLAttributes } from 'react'
+import { FC, HTMLAttributes } from 'react'
 
-export default function InputError ({ message, className = '', ...props }: HTMLAttributes<HTMLParagraphElement> & { message?: string }) {
+const InputError: FC<HTMLAttributes<HTMLParagraphElement> & { message?: string }> = ({ message, className = '', ...props }) => {
   return message
     ? (
       <p {...props} className={'text-sm text-red-600 ' + className}>
@@ -9,3 +9,4 @@ export default function InputError ({ message, className = '', ...props }: HTMLA
       )
     : null
 }
+export default InputError

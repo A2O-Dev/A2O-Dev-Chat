@@ -1,6 +1,6 @@
-import { InputHTMLAttributes } from 'react'
+import { FC, InputHTMLAttributes } from 'react'
 
-export default function Checkbox ({ className = '', ...props }: InputHTMLAttributes<HTMLInputElement>): JSX.Element {
+const Checkbox: FC<InputHTMLAttributes<HTMLInputElement>> = ({ className = '', ...props }) => {
   return (
     <input
       {...props}
@@ -12,3 +12,4 @@ export default function Checkbox ({ className = '', ...props }: InputHTMLAttribu
     />
   )
 }
+export default Checkbox

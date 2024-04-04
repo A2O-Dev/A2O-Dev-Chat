@@ -1,9 +1,9 @@
 import GuestLayout from '@/Layouts/GuestLayout'
 import PrimaryButton from '@/Components/PrimaryButton'
 import { Head, Link, useForm } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import {FC, FormEventHandler} from 'react'
 
-export default function VerifyEmail ({ status }: { status?: string }) {
+const VerifyEmail: FC<{ status?: string }> = ({ status }) => {
   const { post, processing } = useForm({})
 
   const submit: FormEventHandler = (e) => {
@@ -44,3 +44,4 @@ export default function VerifyEmail ({ status }: { status?: string }) {
     </GuestLayout>
   )
 }
+export default VerifyEmail

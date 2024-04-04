@@ -1,4 +1,4 @@
-import { useRef, useState, FormEventHandler } from 'react'
+import {useRef, useState, FormEventHandler, FC} from 'react'
 import DangerButton from '@/Components/DangerButton'
 import InputError from '@/Components/InputError'
 import InputLabel from '@/Components/InputLabel'
@@ -7,7 +7,7 @@ import SecondaryButton from '@/Components/SecondaryButton'
 import TextInput from '@/Components/TextInput'
 import { useForm } from '@inertiajs/react'
 
-export default function DeleteUserForm ({ className = '' }: { className?: string }) {
+const DeleteUserForm: FC<{ className?: string }> = ({ className = '' }) => {
   const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false)
   const passwordInput = useRef<HTMLInputElement>(null)
 
@@ -97,3 +97,4 @@ export default function DeleteUserForm ({ className = '' }: { className?: string
     </section>
   )
 }
+export default DeleteUserForm

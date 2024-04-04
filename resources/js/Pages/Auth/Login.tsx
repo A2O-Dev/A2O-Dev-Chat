@@ -1,4 +1,4 @@
-import { useEffect, FormEventHandler } from 'react'
+import {useEffect, FormEventHandler, FC} from 'react'
 import Checkbox from '@/Components/Checkbox'
 import GuestLayout from '@/Layouts/GuestLayout'
 import InputError from '@/Components/InputError'
@@ -7,7 +7,7 @@ import PrimaryButton from '@/Components/PrimaryButton'
 import TextInput from '@/Components/TextInput'
 import { Head, Link, useForm } from '@inertiajs/react'
 
-export default function Login ({ status, canResetPassword }: { status?: string, canResetPassword: boolean }) {
+const Login: FC<{ status?: string, canResetPassword: boolean }> = ({ status, canResetPassword }) => {
   const { data, setData, post, processing, errors, reset } = useForm({
     email: '',
     password: '',
@@ -95,3 +95,4 @@ export default function Login ({ status, canResetPassword }: { status?: string, 
     </GuestLayout>
   )
 }
+export default Login

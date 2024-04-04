@@ -6,7 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton'
 import TextInput from '@/Components/TextInput'
 import { Head, Link, useForm } from '@inertiajs/react'
 
-export default function Register () {
+const Register: () => void = () => {
   const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
     email: '',
@@ -115,3 +115,4 @@ export default function Register () {
     </GuestLayout>
   )
 }
+export default Register
