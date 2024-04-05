@@ -4,7 +4,7 @@ import UpdatePasswordForm from './Partials/UpdatePasswordForm'
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm'
 import { Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
-import {FC} from "react";
+import { FC } from 'react'
 
 const Edit: FC<PageProps<{ mustVerifyEmail: boolean, status?: string }>> = ({ auth, mustVerifyEmail, status }) => {
   return (

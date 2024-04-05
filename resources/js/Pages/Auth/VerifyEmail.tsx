@@ -1,7 +1,7 @@
 import GuestLayout from '@/Layouts/GuestLayout'
 import PrimaryButton from '@/Components/PrimaryButton'
 import { Head, Link, useForm } from '@inertiajs/react'
-import {FC, FormEventHandler} from 'react'
+import { FC, FormEventHandler } from 'react'
 
 const VerifyEmail: FC<{ status?: string }> = ({ status }) => {
   const { post, processing } = useForm({})

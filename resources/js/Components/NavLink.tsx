@@ -1,6 +1,7 @@
 import { Link, InertiaLinkProps } from '@inertiajs/react'
+import { FC } from 'react'
 
-export default function NavLink ({ active = false, className = '', children, ...props }: InertiaLinkProps & { active: boolean }) {
+const NavLink: FC<InertiaLinkProps & { active: boolean }> = ({ active = false, className = '', children, ...props }) => {
   return (
     <Link
       {...props}
@@ -16,3 +17,4 @@ export default function NavLink ({ active = false, className = '', children, ...
     </Link>
   )
 }
+export default NavLink

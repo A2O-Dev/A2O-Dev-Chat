@@ -1,18 +1,18 @@
-import { Fragment, PropsWithChildren } from 'react'
+import { FC, Fragment, PropsWithChildren } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 
-export default function Modal ({
+const Modal: FC<PropsWithChildren<{
+  show: boolean
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+  closeable?: boolean
+  onClose: CallableFunction
+}>> = ({
   children,
   show = false,
   maxWidth = '2xl',
   closeable = true,
   onClose = () => {}
-}: PropsWithChildren<{
-  show: boolean
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
-  closeable?: boolean
-  onClose: CallableFunction
-}>) {
+}) => {
   const close = () => {
     if (closeable) {
       onClose()
@@ -66,3 +66,4 @@ export default function Modal ({
     </Transition>
   )
 }
+export default Modal

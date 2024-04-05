@@ -1,6 +1,6 @@
-import { ButtonHTMLAttributes } from 'react'
+import { ButtonHTMLAttributes, FC } from 'react'
 
-export default function PrimaryButton ({ className = '', disabled, children, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
+const PrimaryButton: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ className = '', disabled, children, ...props }) => {
   return (
     <button
       {...props}
@@ -15,3 +15,4 @@ export default function PrimaryButton ({ className = '', disabled, children, ...
     </button>
   )
 }
+export default PrimaryButton

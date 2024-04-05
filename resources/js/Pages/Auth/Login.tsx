@@ -1,4 +1,4 @@
-import {useEffect, FormEventHandler, FC} from 'react'
+import { useEffect, FormEventHandler, FC } from 'react'
 import Checkbox from '@/Components/Checkbox'
 import GuestLayout from '@/Layouts/GuestLayout'
 import InputError from '@/Components/InputError'
