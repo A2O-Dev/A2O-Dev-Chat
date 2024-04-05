@@ -9,6 +9,7 @@ FROM composer:${COMPOSER_VERSION} AS composer
 FROM php:${PHP_VERSION}-fpm-alpine
 
 RUN apk add -U --no-cache \
+        linux-headers \
         libpng-dev \
         libxml2-dev \
         libzip-dev \
@@ -17,6 +18,7 @@ RUN apk add -U --no-cache \
         unzip \
         nginx \
         supervisor \
+        $PHPIZE_DEPS \
     && docker-php-ext-configure gd \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install pdo_mysql \
@@ -24,6 +26,11 @@ RUN apk add -U --no-cache \
     && docker-php-ext-install zip \
     && docker-php-source delete \
     && rm -rf /etc/apk/cache/*
+
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+COPY docker/app/conf/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Install node
 COPY --from=node /usr/lib /usr/lib
