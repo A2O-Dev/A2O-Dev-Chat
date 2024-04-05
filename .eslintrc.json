@@ -1,0 +1,9 @@
+{
+    "extends": ["./node_modules/ts-standard/eslintrc.json", "eslint:recommended"],
+    "parserOptions": {
+        "project": ["tsconfig.json"]
+    },
+    "rules": {
+        "react-hooks/exhaustive-deps": "off"
+    }
+}
