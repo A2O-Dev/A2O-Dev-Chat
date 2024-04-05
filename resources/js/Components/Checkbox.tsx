@@ -1,14 +1,15 @@
-import { InputHTMLAttributes } from 'react';
+import { FC, InputHTMLAttributes } from 'react'
 
-export default function Checkbox({ className = '', ...props }: InputHTMLAttributes<HTMLInputElement>) {
-    return (
-        <input
-            {...props}
-            type="checkbox"
-            className={
+const Checkbox: FC<InputHTMLAttributes<HTMLInputElement>> = ({ className = '', ...props }) => {
+  return (
+    <input
+      {...props}
+      type='checkbox'
+      className={
                 'rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 ' +
                 className
             }
-        />
-    );
+    />
+  )
 }
+export default Checkbox
