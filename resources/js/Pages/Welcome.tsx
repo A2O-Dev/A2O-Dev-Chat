@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { Link, Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
 import Echo from 'laravel-echo'
+// @ts-expect-error
+import io from 'socket.io-client'
 
 // @ts-expect-error
 const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ auth, laravelVersion, phpVersion }) => {
@@ -14,6 +16,7 @@ const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ au
 
   useEffect(() => {
     const echo = new Echo({
+      client: io,
       broadcaster: 'socket.io',
       host: window.location.hostname + ':6001'
     })
