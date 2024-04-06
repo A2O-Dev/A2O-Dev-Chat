@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { Link, Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
+import Echo from 'laravel-echo'
 
 const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ auth, laravelVersion, phpVersion }) => {
   const handleImageError = () => {
@@ -8,6 +10,18 @@ const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ au
     document.getElementById('docs-card-content')?.classList.add('!flex-row')
     document.getElementById('background')?.classList.add('!hidden')
   }
+
+  useEffect(() => {
+    const echo = new Echo({
+      broadcaster: 'socket.io',
+      host: window.location.hostname + ':6001'
+    })
+
+    echo.channel('test')
+      .listen('TestEvent', e => {
+        console.log({ e })
+      })
+  }, [])
 
   return (
     <>
