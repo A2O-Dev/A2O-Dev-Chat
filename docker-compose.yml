@@ -6,6 +6,7 @@ services:
     restart: always
     ports:
       - ${DC_APP_HOST:-80}:80
+      - 6001:6001
     volumes:
       - app_data:/data
       - ./:/var/www/html

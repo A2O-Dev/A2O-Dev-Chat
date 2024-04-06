@@ -50,6 +50,8 @@ RUN composer install --prefer-dist --no-interaction --ignore-platform-reqs
 # Install npm dependencies
 RUN npm install
 
+RUN npm install laravel-echo-server --location=global
+
 # Set environment variables
 RUN php artisan key:generate
 
