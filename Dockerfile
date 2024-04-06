@@ -31,6 +31,8 @@ RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
 COPY docker/app/conf/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN touch /tmp/xdebug.log
+RUN chmod 777 /tmp/xdebug.log
 
 # Install node
 COPY --from=node /usr/lib /usr/lib
