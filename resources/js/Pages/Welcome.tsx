@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { Link, Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
 import Echo from 'laravel-echo'
-// @ts-expect-error
 import io from 'socket.io-client'
 
 // @ts-expect-error
