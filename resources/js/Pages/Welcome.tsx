@@ -3,6 +3,7 @@ import { Link, Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
 import Echo from 'laravel-echo'
 
+// @ts-expect-error
 const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ auth, laravelVersion, phpVersion }) => {
   const handleImageError = () => {
     document.getElementById('screenshot-container')?.classList.add('!hidden')
@@ -18,7 +19,7 @@ const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ au
     })
 
     echo.channel('test')
-      .listen('TestEvent', e => {
+      .listen('TestEvent', (e: any) => {
         console.log({ e })
       })
   }, [])
