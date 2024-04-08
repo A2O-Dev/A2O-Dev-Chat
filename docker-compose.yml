@@ -23,6 +23,10 @@ services:
       - MYSQL_ROOT_PASSWORD=${DC_DB_PASSWORD:-root}
     volumes:
       - db_data:/var/lib/mysql
+  redis:
+      image: redis
+      ports:
+          - ${REDIS_PORT:-6379}:6379
 
 volumes:
   db_data:

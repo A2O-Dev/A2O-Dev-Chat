@@ -5,8 +5,13 @@ window.io = io;
 
 const echo = new Echo({
     broadcaster: 'socket.io',
-    host: 'http://localhost:6001',
+    host: window.location.hostname + ':6001',
+    client: io,
+    autoConnect: true,
+    forceNode: true
 });
+
+console.log('echo',echo)
 echo.connector.socket.on('connect', () => {
     console.log('WebSocket connection established');
 }).on('error', (error) => {

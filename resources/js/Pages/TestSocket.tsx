@@ -4,8 +4,7 @@ import echo from '../services/echo';
 const TestSocket: FC = () => {
     useEffect(() => {
         echo.channel('chat')
-            .listen('test-event', (data: any) => {
-                console.log('hola')
+            .listen('test', (data: any) => {
                 console.log('Event gotten:', data);
             });
     });
@@ -17,4 +16,3 @@ const TestSocket: FC = () => {
     );
 };
 
-export default TestSocket;
