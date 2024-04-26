@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/fire', function () {
-    event(new \App\Events\TestEvent());
+    event(new \App\Events\TestEvent('hello'));
     return 'ok';
 });
 

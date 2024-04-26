@@ -22,8 +22,13 @@ const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ au
 
     echo.channel('test')
       .listen('TestEvent', (e: any) => {
-        console.log({ e })
+        console.log( {e} )
       })
+      echo.join('test').whisper('msg',  {
+          data: 'hello from client',
+          typing: true
+      });
+
   }, [])
 
   return (
