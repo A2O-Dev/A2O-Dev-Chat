@@ -6,11 +6,12 @@ services:
     restart: always
     ports:
       - ${DC_APP_HOST:-80}:80
+      - 6001:6001
     volumes:
-        - app_data:/data
-        - ./:/var/www/html
+      - app_data:/data
+      - ./:/var/www/html
     depends_on:
-        - db
+      - db
 
   db:
     container_name: a2odev-chat-db
@@ -23,11 +24,18 @@ services:
       - MYSQL_ROOT_PASSWORD=${DC_DB_PASSWORD:-root}
     volumes:
       - db_data:/var/lib/mysql
+
   redis:
-      image: redis
-      ports:
-          - ${REDIS_PORT:-6379}:6379
+    container_name: redis
+    image: redis:${DC_REDIS_VERSION:-7.2.4-alpine}
+    restart: always
+    ports:
+      - 127.0.0.1:6379:6379
+    volumes:
+      - redis_data:/data
+
 
 volumes:
   db_data:
   app_data:
+  redis_data:

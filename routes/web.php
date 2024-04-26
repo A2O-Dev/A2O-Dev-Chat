@@ -5,19 +5,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/test-socket', function () {
-    //Broadcast::event('test', ['message' => 'This message is an test message']);
-    event(new \App\Events\TestEvent());
-    return response()->json(['message' => 'Event sent']);
-});
 Route::get('/fire', function () {
     event(new \App\Events\TestEvent());
-    //Broadcast::event('test', ['message' => 'This message is an test message']);
     return 'ok';
 });
-Route::get('/test', function () {
-    return Inertia::render('TestSocket');
-})->name('test');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
