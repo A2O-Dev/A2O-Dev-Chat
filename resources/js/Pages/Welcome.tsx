@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { Link, Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
-import Echo from 'laravel-echo'
-import io from 'socket.io-client'
+import echo from '../services/echo'
 
 // @ts-expect-error
 const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ auth, laravelVersion, phpVersion }) => {
@@ -14,21 +13,10 @@ const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ au
   }
 
   useEffect(() => {
-    const echo = new Echo({
-      client: io,
-      broadcaster: 'socket.io',
-      host: window.location.hostname + ':6001'
-    })
-
     echo.channel('test')
       .listen('TestEvent', (e: any) => {
-        console.log( {e} )
+        console.log({ e })
       })
-      echo.join('test').whisper('msg',  {
-          data: 'hello from client',
-          typing: true
-      });
-
   }, [])
 
   return (

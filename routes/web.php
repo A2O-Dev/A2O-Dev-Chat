@@ -9,6 +9,9 @@ Route::get('/fire', function () {
     event(new \App\Events\TestEvent('hello'));
     return 'ok';
 });
+Route::get('/test-socket', function () {
+    return Inertia::render('TestSocket');
+});
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
