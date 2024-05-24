@@ -6,6 +6,7 @@ import { createInertiaApp } from '@inertiajs/react'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ThemeProvider } from '@mui/material/styles'
 import { defaultTheme } from './themes/default-theme'
+import { CssBaseline } from '@mui/material'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel'
 
@@ -16,6 +17,7 @@ createInertiaApp({
     const root = createRoot(el)
     root.render(
       <ThemeProvider theme={defaultTheme}>
+        <CssBaseline />
         <App {...props} />
       </ThemeProvider>
     )
