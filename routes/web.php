@@ -5,11 +5,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/fire', function () {
-    event(new \App\Events\TestEvent('hello'));
-    return 'ok';
-});
-
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

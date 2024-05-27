@@ -1,7 +1,5 @@
-import { useEffect } from 'react'
 import { Link, Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
-import echo from '../services/echo'
 
 // @ts-expect-error
 const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ auth, laravelVersion, phpVersion }) => {
@@ -11,13 +9,6 @@ const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ au
     document.getElementById('docs-card-content')?.classList.add('!flex-row')
     document.getElementById('background')?.classList.add('!hidden')
   }
-
-  useEffect(() => {
-    echo.channel('test')
-      .listen('TestEvent', (e: any) => {
-        console.log({ e })
-      })
-  }, [])
 
   return (
     <>
