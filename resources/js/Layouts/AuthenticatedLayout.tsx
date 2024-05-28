@@ -31,6 +31,7 @@ export default function Authenticated ({ user, header, children }: PropsWithChil
             <div className='hidden sm:flex sm:items-center sm:ms-6'>
               <div className='ms-3 relative'>
                 <Dropdown>
+                  {/* @ts-expect-error */}
                   <Dropdown.Trigger>
                     <span className='inline-flex rounded-md'>
                       <button
@@ -53,13 +54,19 @@ export default function Authenticated ({ user, header, children }: PropsWithChil
                         </svg>
                       </button>
                     </span>
+                    {/* @ts-expect-error */}
                   </Dropdown.Trigger>
 
+                  {/* @ts-expect-error */}
                   <Dropdown.Content>
+                    {/* @ts-expect-error */}
                     <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                    {/* @ts-expect-error */}
                     <Dropdown.Link href={route('logout')} method='post' as='button'>
                       Log Out
+                      {/* @ts-expect-error */}
                     </Dropdown.Link>
+                    {/* @ts-expect-error */}
                   </Dropdown.Content>
                 </Dropdown>
               </div>

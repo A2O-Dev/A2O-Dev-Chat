@@ -31,6 +31,8 @@ RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
 COPY docker/app/conf/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN touch /tmp/xdebug.log
+RUN chmod 777 /tmp/xdebug.log
 
 # Install node
 COPY --from=node /usr/lib /usr/lib
@@ -49,6 +51,8 @@ RUN composer install --prefer-dist --no-interaction --ignore-platform-reqs
 
 # Install npm dependencies
 RUN npm install
+
+RUN npm install laravel-echo-server --location=global
 
 # Set environment variables
 RUN php artisan key:generate

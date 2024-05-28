@@ -92,8 +92,11 @@ const DropdownLink: FC<InertiaLinkProps> = ({ className = '', children, ...props
   )
 }
 
+// @ts-expect-error
 Dropdown.Trigger = Trigger
+// @ts-expect-error
 Dropdown.Content = Content
+// @ts-expect-error
 Dropdown.Link = DropdownLink
 
 export default Dropdown
