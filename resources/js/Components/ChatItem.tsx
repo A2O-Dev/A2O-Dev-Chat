@@ -14,7 +14,7 @@ interface ChatItemProps {
 
 const ChatItem: FC<ChatItemProps> = ({ chat, onSelect }) => {
   return (
-    <ListItem button onClick={onSelect}>
+    <ListItem onClick={onSelect} className='cursor-pointer'>
       <ListItemAvatar>
         <Avatar src='to/be/defined' alt='avatar' variant='rounded' />
       </ListItemAvatar>

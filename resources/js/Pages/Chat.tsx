@@ -16,7 +16,7 @@ const Chat: FC<PageProps> = ({ auth }) => {
       user={auth.user}
       header={<h2 className='font-semibold text-xl text-gray-800 leading-tight'>Chat</h2>}
     >
-      <div className='grid grid-cols-3'>
+      <div className='grid grid-cols-3 bg-white'>
         <div className='col-span-1'>
           <ChatList onSelectChat={handleSelectChat} />
         </div>

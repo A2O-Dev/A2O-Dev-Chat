@@ -5,11 +5,10 @@ import { ReactElement, FC } from 'react'
 import ApplicationLogo from './ApplicationLogo'
 import NavLinkSidebar from './NavLinkSidebar'
 import { User } from '@/types'
-import Dropdown from './Dropdown'
-import { Divider } from '@mui/material'
 import { Logout } from '@mui/icons-material'
 
 interface MenuItem {
+  id: number
   href: string
   text: string
   icon: ReactElement
@@ -17,8 +16,8 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { href: 'dashboard', text: 'Dashboard', icon: <MailIcon />, notifications: 0 },
-  { href: 'chat', text: 'Chats', icon: <InboxIcon />, notifications: 43 }
+  { id: 1, href: 'dashboard', text: 'Dashboard', icon: <MailIcon />, notifications: 0 },
+  { id: 2, href: 'chat', text: 'Chats', icon: <InboxIcon />, notifications: 43 }
 ]
 
 interface SidebarProps {
@@ -34,7 +33,7 @@ const Sidebar: FC<SidebarProps> = ({ user }) => {
 
       <div className='w-full text-center flex flex-col gap-5 items-center'>
         {menuItems.map((item, index) => (
-          <NavLinkSidebar key={index} href={route(item.href)} active={route().current(item.href)}>
+          <NavLinkSidebar key={item.id} href={route(item.href)} active={route().current(item.href)}>
             <div className='relative flex flex-col justify-center items-center'>
               <p className='text-4xl'>
                 {item.icon}
