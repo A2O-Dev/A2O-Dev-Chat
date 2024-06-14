@@ -7,7 +7,7 @@ import { Link } from '@inertiajs/react'
 import { User } from '@/types'
 import Sidebar from '@/Components/Sidebar'
 
-export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
+export default function Authenticated ({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false)
 
   return (

@@ -1,22 +1,29 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
-import { FC } from 'react'
+import { FC, useState } from 'react'
+import ChatList from '@/Components/ChatList'
+import ChatContent from '@/Components/ChatContent'
 
 const Chat: FC<PageProps> = ({ auth }) => {
+  const [selectedChat, setSelectedChat] = useState<number | null>(null)
+
+  const handleSelectChat = (id: number) => {
+    setSelectedChat(id)
+  }
+
   return (
     <AuthenticatedLayout
       user={auth.user}
       header={<h2 className='font-semibold text-xl text-gray-800 leading-tight'>Chat</h2>}
     >
-      {/* <Head title='Chat' />
-      <div className='py-12'>
-        <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
-          <div className='bg-white overflow-hidden shadow-sm sm:rounded-lg'>
-            <div className='p-6 text-gray-900'>Chat</div>
-          </div>
+      <div className='grid grid-cols-3'>
+        <div className='col-span-1'>
+          <ChatList onSelectChat={handleSelectChat} />
         </div>
-      </div> */}
+        <div className='col-span-2'>
+          {selectedChat ? <ChatContent chatId={selectedChat} /> : <p className='text-center'>Seleccione un chat</p>}
+        </div>
+      </div>
     </AuthenticatedLayout>
   )
 }
