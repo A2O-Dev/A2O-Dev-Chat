@@ -44,6 +44,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    /**
+     * The rooms that belong to the user.
+     */
     public function rooms()
     {
         return $this->belongsToMany(Room::class, 'room_user');

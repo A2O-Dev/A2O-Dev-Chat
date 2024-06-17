@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { ListItem, ListItemText, Badge, ListItemAvatar, Avatar } from '@mui/material'
 
 interface ChatItemProps {

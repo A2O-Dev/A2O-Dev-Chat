@@ -11,11 +11,17 @@ class Room extends Model
 
     protected $fillable = ['name'];
 
+    /**
+     * @return HasMany
+     */
     public function messages()
     {
         return $this->hasMany(Message::class);
     }
 
+    /**
+     * The users that belong to the room.
+     */
     public function users()
     {
         return $this->belongsToMany(User::class, 'room_user');
