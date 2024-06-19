@@ -1,30 +1,56 @@
-import { useState, PropsWithChildren, ReactNode } from 'react'
-import ApplicationLogo from '@/Components/ApplicationLogo'
-import Dropdown from '@/Components/Dropdown'
-import NavLink from '@/Components/NavLink'
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink'
-import { Link } from '@inertiajs/react'
+import { PropsWithChildren, ReactNode } from 'react'
 import { User } from '@/types'
 import Sidebar from '@/Components/Sidebar'
+import { Box, Grid, Typography } from '@mui/material'
 
-export default function Authenticated ({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
-  const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false)
-
+const Authenticated = ({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) => {
   return (
-    <div className='min-h-screen bg-[#202022] grid grid-cols-10'>
-      <div className='col-span-1'>
+    <Grid
+      container
+      sx={{
+        minHeight: '100vh',
+        backgroundColor: '#202022'
+      }}
+    >
+      <Grid item xs={2}>
         <Sidebar user={user} />
-      </div>
-      <div className='col-span-9 bg-gray-100 rounded-xl overflow-hidden m-2'>
+      </Grid>
+      <Grid
+        item
+        xs={10}
+        sx={{
+          backgroundColor: '#f1f1f1',
+          borderRadius: '16px',
+          overflow: 'hidden',
+          marginY: 1
+        }}>
 
         {header && (
-          <header className='bg-white shadow'>
-            <div className='max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8'>{header}</div>
-          </header>
+          <Box xs={{
+            backgroundColor: '#fff'
+          }}
+          >
+            <Typography
+              variant='h2'
+              sx={{
+                fontWeight: 'fontWeightBold',
+                fontSize: '1.25rem',
+                color: 'text.secondary',
+                backgroundColor: '#fff',
+                padding: 3,
+                textAlign: 'center',
+                lineHeight: 'tight'
+              }}
+            >
+              {header}
+            </Typography>
+          </Box>
         )}
 
         <main>{children}</main>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   )
 }
+
+export default Authenticated

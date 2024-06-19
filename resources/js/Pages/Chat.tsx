@@ -3,6 +3,7 @@ import { PageProps } from '@/types'
 import { FC, useState } from 'react'
 import ChatList from '@/Components/ChatList'
 import ChatContent from '@/Components/ChatContent'
+import { Typography } from '@mui/material'
 
 const Chat: FC<PageProps> = ({ auth }) => {
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
@@ -14,7 +15,7 @@ const Chat: FC<PageProps> = ({ auth }) => {
   return (
     <AuthenticatedLayout
       user={auth.user}
-      header={<h2 className='font-semibold text-xl text-gray-800 leading-tight'>Chat</h2>}
+      header='Chat'
     >
       <div className='grid grid-cols-3 bg-white'>
         <div className='col-span-1'>
