@@ -23,7 +23,8 @@ const Authenticated = ({ user, header, children }: PropsWithChildren<{ user: Use
           borderRadius: '16px',
           overflow: 'hidden',
           marginY: 1
-        }}>
+        }}
+      >
 
         {header && (
           <Box xs={{

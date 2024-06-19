@@ -6,6 +6,7 @@ import ApplicationLogo from './ApplicationLogo'
 import NavLinkSidebar from './NavLinkSidebar'
 import { User } from '@/types'
 import { Logout } from '@mui/icons-material'
+import { Badge, Box, Typography } from '@mui/material'
 
 interface MenuItem {
   id: number
@@ -16,8 +17,8 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { id: 1, href: 'dashboard', text: 'Dashboard', icon: <MailIcon />, notifications: 0 },
-  { id: 2, href: 'chat', text: 'Chats', icon: <InboxIcon />, notifications: 43 }
+  { id: 1, href: 'dashboard', text: 'Dashboard', icon: <MailIcon fontSize='inherit' />, notifications: 0 },
+  { id: 2, href: 'chat', text: 'Chats', icon: <InboxIcon fontSize='inherit' />, notifications: 43 }
 ]
 
 interface SidebarProps {
@@ -26,47 +27,97 @@ interface SidebarProps {
 
 const Sidebar: FC<SidebarProps> = ({ user }) => {
   return (
-    <div className='w-full h-full text-white'>
-      <div className='p-4'>
+    <Box sx={{ width: '100%', height: '100%', color: 'white' }}>
+      <Box sx={{ padding: 4 }}>
         <ApplicationLogo />
-      </div>
+      </Box>
 
-      <div className='w-full text-center flex flex-col gap-5 items-center'>
+      <Box
+        sx={{
+          width: '100%',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 5,
+          alignItems: 'center'
+        }}
+      >
         {menuItems.map((item, index) => (
-          <NavLinkSidebar key={item.id} href={route(item.href)} active={route().current(item.href)}>
-            <div className='relative flex flex-col justify-center items-center'>
-              <p className='text-4xl'>
+          <NavLinkSidebar key={item.id} href={route(item.href)} as='button' active={route().current(item.href)}>
+            <Box
+              sx={{
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Typography
+                variant='h4' component='div'
+              >
                 {item.icon}
-              </p>
-              <p>{item.text}</p>
+              </Typography>
+              <Typography>
+                {item.text}
+              </Typography>
               {item.notifications > 0 && (
-                <span className='bg-[#ff7a55] text-white text-xs p-1 rounded-full absolute top-0 right-0'>
-                  {item.notifications}
-                </span>
+                <Badge
+                  badgeContent={item.notifications}
+                  color='error'
+                  sx={{
+                    backgroundColor: '#ff7a55',
+                    color: 'white',
+                    fontSize: '0.75rem',
+                    padding: '0.25rem',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                    top: 0,
+                    right: 0
+                  }}
+                />
               )}
-            </div>
+            </Box>
           </NavLinkSidebar>
         ))}
 
-        <NavLinkSidebar href={route('profile.edit')} active={route().current('profile.edit')}>
-          <div className='relative flex flex-col justify-center items-center w-full'>
-            <p className='text-4xl'>
-              <PersonIcon />
-            </p>
-            <p>Profile </p>
-          </div>
+        <NavLinkSidebar href={route('profile.edit')} as='button' active={route().current('profile.edit')}>
+          <Box
+            sx={{
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%'
+            }}
+          >
+            <Typography variant='h4' component='div'>
+              <PersonIcon fontSize='inherit' />
+            </Typography>
+            <Typography>Profile</Typography>
+          </Box>
         </NavLinkSidebar>
 
         <NavLinkSidebar href={route('logout')} method='post' as='button' active={route().current('logout')}>
-          <div className='relative flex flex-col justify-center items-center w-full'>
-            <p className='text-4xl'>
-              <Logout />
-            </p>
-            <p>Log Out</p>
-          </div>
+          <Box
+            sx={{
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%'
+            }}
+          >
+            <Typography variant='h4' component='div'>
+              <Logout fontSize='inherit' />
+            </Typography>
+            <Typography>Log Out</Typography>
+          </Box>
         </NavLinkSidebar>
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }
 
