@@ -14,10 +14,7 @@ interface ChatItemProps {
 
 const ChatItem: FC<ChatItemProps> = ({ chat, onSelect }) => {
   return (
-    <ListItem onClick={onSelect} className='cursor-pointer'>
-      <ListItemAvatar>
-        <Avatar src='to/be/defined' alt='avatar' variant='rounded' />
-      </ListItemAvatar>
+    <ListItem onClick={onSelect} sx={{ height: '100%', cursor: 'pointer' }}>
       <ListItemText primary={chat.name} secondary={chat.lastMessage} />
       {chat.notifications > 0 && (
         <Badge badgeContent={chat.notifications} color='error' />
