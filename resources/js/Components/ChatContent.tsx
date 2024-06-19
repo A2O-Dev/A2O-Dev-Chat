@@ -1,5 +1,5 @@
 
-import { Avatar } from '@mui/material'
+import { Box, TextField, Typography } from '@mui/material'
 import { FC } from 'react'
 
 interface Message {
@@ -32,29 +32,44 @@ const messages: Message[][] = [
 ]
 const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
   return (
-    <div className='flex flex-col p-4 h-full'>
-      <div className='flex-grow overflow-y-auto'>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'end',
+        p: 4,
+        height: '100%'
+      }}
+    >
+      <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
         {messages[chatId - 1].map((message) => (
-          <div key={message.id} className='flex mb-4'>
-            <Avatar alt={message.user} src={message.avatar} variant='rounded' />
-            <div className='ml-4'>
-              <div className='flex items-center'>
-                <h4 className='font-semibold'>{message.user}</h4>
-                <span className='text-gray-500 ml-2 text-sm'>{message.time}</span>
-              </div>
-              <p>{message.content}</p>
-            </div>
-          </div>
+          <Box key={message.id} sx={{ display: 'flex', marginBottom: 1 }}>
+            <Box sx={{ marginLeft: 4, backgroundColor: '#f2f2f2', padding: 2, borderRadius: 5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant='p' sx={{ fontWeight: 'bold' }}>
+                  {message.user}
+                </Typography>
+                <Typography variant='body2' sx={{ color: 'gray', ml: 2 }}>
+                  {message.time}
+                </Typography>
+              </Box>
+              <Typography variant='body1'>
+                {message.content}
+              </Typography>
+            </Box>
+          </Box>
         ))}
-      </div>
-      <div className='mt-4'>
-        <input
+      </Box>
+      <Box sx={{ marginTop: 4 }}>
+        <TextField
           type='text'
-          className='w-full p-2 border rounded'
+          fullWidth
           placeholder='Type a message'
+          variant='outlined'
+          sx={{ p: 1 }}
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }
 
