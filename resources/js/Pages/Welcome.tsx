@@ -1,6 +1,7 @@
 import { Link, Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
 
+// @ts-expect-error
 const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ auth, laravelVersion, phpVersion }) => {
   const handleImageError = () => {
     document.getElementById('screenshot-container')?.classList.add('!hidden')
