@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { ListItem, ListItemText, Badge, ListItemAvatar, Avatar } from '@mui/material'
+import { ListItem, ListItemText, Badge } from '@mui/material'
 
 interface ChatItemProps {
   chat: {

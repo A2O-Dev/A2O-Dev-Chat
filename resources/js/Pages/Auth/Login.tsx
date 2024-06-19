@@ -87,7 +87,7 @@ const Login: FC<{ status?: string, canResetPassword: boolean }> = ({ status, can
             </Link>
           )}
 
-          <PrimaryButton className='ms-4' disabled={processing}>
+          <PrimaryButton className='ms-4' disabled={processing} onClick={submit}>
             Log in
           </PrimaryButton>
         </div>
