@@ -29,7 +29,7 @@ const VerifyEmail: FC<{ status?: string }> = ({ status }) => {
 
       <form onSubmit={submit}>
         <div className='mt-4 flex items-center justify-between'>
-          <PrimaryButton disabled={processing}>Resend Verification Email</PrimaryButton>
+          <PrimaryButton disabled={processing} onClick={submit}>Resend Verification Email</PrimaryButton>
 
           <Link
             href={route('logout')}

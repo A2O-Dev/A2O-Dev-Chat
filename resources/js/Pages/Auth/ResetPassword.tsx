@@ -80,7 +80,7 @@ const ResetPassword: FC<{ token: string, email: string }> = ({ token, email }) =
         </div>
 
         <div className='flex items-center justify-end mt-4'>
-          <PrimaryButton className='ms-4' disabled={processing}>
+          <PrimaryButton className='ms-4' disabled={processing} onClick={submit}>
             Reset Password
           </PrimaryButton>
         </div>
