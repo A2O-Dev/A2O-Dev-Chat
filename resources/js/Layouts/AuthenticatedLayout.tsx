@@ -18,55 +18,15 @@ const Authenticated = ({ user, header, children }: PropsWithChildren<{ user: Use
       <Navbar user={user} />
       <Box
         sx={{
-          backgroundColor: '#0049A8',
+          backgroundColor: '#fff',
           height: 'calc(100vh - 60px)',
           overflow: 'hidden'
         }}
       >
 
         {header && (
-          <Box sx={{ display: 'flex', height: '80px' }}>
-            <Box
-              sx={{
-                width: '30%',
-                height: '100%',
-                backgroundColor: '#0049A8',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingInline: 5,
-                borderBottom: '#002C87 1px solid'
-              }}
-            >
-              <Box sx={{ color: '#fff', width: '100%', display: 'flex', justifyContent: 'center' }}>
-                <TextField
-                  sx={{ backgroundColor: '#577FC2', color: '#fff' }}
-                  variant='outlined'
-                  placeholder='Search...'
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position='start'>
-                        <SearchIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                />
-              </Box>
-            </Box>
-            <Box sx={{ width: '70%', height: '100%', backgroundColor: '#EEEEEE' }}>
-              <Typography
-                variant='h2'
-                sx={{
-                  fontWeight: 'fontWeightBold',
-                  fontSize: '1.25rem',
-                  color: 'text.secondary',
-                  padding: 3,
-                  textAlign: 'center'
-                }}
-              >
-                {header}
-              </Typography>
-            </Box>
+          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#EEEEEE' }}>
+            {header}
           </Box>
         )}
 
