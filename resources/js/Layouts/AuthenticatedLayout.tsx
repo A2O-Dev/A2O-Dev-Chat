@@ -1,7 +1,6 @@
 import { PropsWithChildren, ReactNode } from 'react'
 import { User } from '@/types'
-import { Box, InputAdornment, TextField, Typography } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
+import { Box } from '@mui/material'
 import Navbar from '@/Components/Navbar'
 
 const Authenticated = ({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) => {
