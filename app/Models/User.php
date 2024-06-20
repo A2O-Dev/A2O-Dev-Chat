@@ -48,6 +48,8 @@ class User extends Authenticatable
 
     /**
      * The rooms that belong to the user.
+     *
+     * @return BelongsToMany
      */
     public function rooms()
     {

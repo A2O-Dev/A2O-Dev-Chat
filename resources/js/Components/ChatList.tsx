@@ -8,11 +8,11 @@ const chats = [
 
 ]
 
-const ChatList: FC<{ onSelectChat: (id: number) => void }> = ({ onSelectChat }) => {
+const ChatList: FC<{ selected: number, onSelectChat: (id: number) => void }> = ({ selected, onSelectChat }) => {
   return (
     <List>
       {chats.map(chat => (
-        <ChatItem key={chat.id} chat={chat} onSelect={() => onSelectChat(chat.id)} />
+        <ChatItem key={chat.id} chat={chat} onSelect={() => onSelectChat(chat.id)} isActive={selected === chat.id} />
       ))}
     </List>
   )

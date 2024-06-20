@@ -21,6 +21,8 @@ class Room extends Model
 
     /**
      * The users that belong to the room.
+     *
+     * @return BelongsToMany
      */
     public function users()
     {
