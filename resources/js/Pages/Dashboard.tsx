@@ -13,7 +13,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
   const [validarEmail, setValidarEmail] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
 
-  const handleSelectChat = (id: number) => {
+  const handleSelectChat = (id: number): void => {
     setSelectedChat(id)
   }
 
@@ -65,61 +65,63 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
       }
       <AuthenticatedLayout
         user={auth.user}
-        header={<Box sx={{ display: 'flex', height: '80px', width: '100%', boxShadow: 3 }}>
-          <Box
-            sx={{
-              width: '25%',
-              height: '100%',
-              backgroundColor: '#0049A8',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingInline: 2,
-              borderBottom: '#002C87 2px solid'
-            }}
-          >
-            <Box sx={{ color: '#fff', width: '100%', display: 'flex', justifyContent: 'center' }}>
-              <TextField
-                sx={{
-                  backgroundColor: '#5580C5',
-                  borderRadius: '5px',
-                  input: { color: '#fff' },
-                  '& .MuiOutlinedInput-root': {
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#fff'
-                    },
-                    '& .Mui-focused input': {
-                      fontWeight: 'bold'
-                    }
-                  }
-                }}
-                variant='outlined'
-                placeholder='Search...'
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <SearchIcon sx={{ color: '#fff' }} />
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Box>
-          </Box>
-          <Box sx={{ width: '75%', height: '100%', backgroundColor: '#EEEEEE' }}>
-            <Typography
-              variant='h2'
+        header={
+          <Box sx={{ display: 'flex', height: '80px', width: '100%', boxShadow: 3 }}>
+            <Box
               sx={{
-                fontWeight: 'fontWeightBold',
-                fontSize: '1.25rem',
-                color: 'text.secondary',
-                padding: 3,
-                textAlign: 'center'
+                width: '25%',
+                height: '100%',
+                backgroundColor: '#0049A8',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingInline: 2,
+                borderBottom: '#002C87 2px solid'
               }}
             >
-              {auth?.user?.name}
-            </Typography>
+              <Box sx={{ color: '#fff', width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <TextField
+                  sx={{
+                    backgroundColor: '#5580C5',
+                    borderRadius: '5px',
+                    input: { color: '#fff' },
+                    '& .MuiOutlinedInput-root': {
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#fff'
+                      },
+                      '& .Mui-focused input': {
+                        fontWeight: 'bold'
+                      }
+                    }
+                  }}
+                  variant='outlined'
+                  placeholder='Search...'
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <SearchIcon sx={{ color: '#fff' }} />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box sx={{ width: '75%', height: '100%', backgroundColor: '#EEEEEE' }}>
+              <Typography
+                variant='h2'
+                sx={{
+                  fontWeight: 'fontWeightBold',
+                  fontSize: '1.25rem',
+                  color: 'text.secondary',
+                  padding: 3,
+                  textAlign: 'center'
+                }}
+              >
+                {auth?.user?.name}
+              </Typography>
+            </Box>
           </Box>
-        </Box>}
+        }
       >
         <Box sx={{ display: 'flex', height: '100%' }}>
           <Box sx={{ position: 'relative', width: '25%', height: '100%', color: '#fff', backgroundColor: '#0049A8', boxShadow: 3 }}>
@@ -131,7 +133,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
 
           </Box>
           <Box sx={{ width: '75%' }}>
-            {selectedChat
+            {selectedChat !== null
               ? <ChatContent chatId={selectedChat} />
               : <Typography align='center' padding={2}>
                 Seleccione un chat
