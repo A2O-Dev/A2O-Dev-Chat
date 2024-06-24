@@ -9,8 +9,8 @@ import SearchIcon from '@mui/icons-material/Search'
 import Modal from '@mui/material/Modal'
 
 const Dashboard: FC<PageProps> = ({ auth }) => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [validarEmail, setValidarEmail] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false)
+  const [validarEmail, setValidarEmail] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
 
   const handleSelectChat = (id: number) => {
@@ -21,43 +21,47 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
     <>
       {
         open &&
-        <Modal
-          open={open}
-          onClose={() => setOpen(false)} >
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            borderRadius: '10px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'end',
-            gap: 2,
-            width: 400,
-            bgcolor: 'background.paper',
-            border: '2px solid #ccc',
-            boxShadow: 24,
-            p: 4
-          }}>
-            <Typography variant='h2'
-              sx={{
-                fontWeight: 'fontWeightBold',
-                fontSize: '1.25rem',
-              }} >
-              Nuevo Mensaje
-            </Typography>
-            <TextField label="Email" variant="outlined" type="email" fullWidth disabled={validarEmail} />
-            <Button variant='outlined' disabled={validarEmail} onClick={() => setValidarEmail(true)}>Validar Email</Button>
-            {
+          <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+          >
+            <Box sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              borderRadius: '10px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'end',
+              gap: 2,
+              width: 400,
+              bgcolor: 'background.paper',
+              border: '2px solid #ccc',
+              boxShadow: 24,
+              p: 4
+            }}
+            >
+              <Typography
+                variant='h2'
+                sx={{
+                  fontWeight: 'fontWeightBold',
+                  fontSize: '1.25rem'
+                }}
+              >
+                Nuevo Mensaje
+              </Typography>
+              <TextField label='Email' variant='outlined' type='email' fullWidth disabled={validarEmail} />
+              <Button variant='outlined' disabled={validarEmail} onClick={() => setValidarEmail(true)}>Validar Email</Button>
+              {
               validarEmail &&
-              <>
-                <TextField label="Mensaje" variant="outlined" type="text" fullWidth />
-                <Button variant='outlined' >Enviar</Button>
-              </>
+                <>
+                  <TextField label='Mensaje' variant='outlined' type='text' fullWidth />
+                  <Button variant='outlined'>Enviar</Button>
+                </>
             }
-          </Box>
-        </Modal>
+            </Box>
+          </Modal>
       }
       <AuthenticatedLayout
         user={auth.user}
@@ -122,7 +126,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
             <ChatList selected={selectedChat} onSelectChat={handleSelectChat} />
 
             <IconButton onClick={() => setOpen(true)} sx={{ position: 'absolute', left: 10, bottom: 10 }}>
-              <AddCircle sx={{ color: "#fff", width: '60px', height: '60px' }} />
+              <AddCircle sx={{ color: '#fff', width: '60px', height: '60px' }} />
             </IconButton>
 
           </Box>
