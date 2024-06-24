@@ -17,16 +17,16 @@ const NavLinkSidebar: FC<InertiaLinkProps & { active: boolean }> = ({ active = f
         outline: 'none',
         ...(active
           ? {
-            backgroundColor: '#464646',
-            color: 'white'
-          }
-          : {
-            border: '1px solid transparent',
-            color: '#898787',
-            '&:hover': {
-              color: '#200'
+              backgroundColor: '#464646',
+              color: 'white'
             }
-          })
+          : {
+              border: '1px solid transparent',
+              color: '#898787',
+              '&:hover': {
+                color: '#200'
+              }
+            })
       }}
     >
       <Link

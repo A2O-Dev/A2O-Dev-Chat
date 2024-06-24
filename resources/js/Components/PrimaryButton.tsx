@@ -2,7 +2,7 @@ import { Button, ButtonProps } from '@mui/material'
 import { FC } from 'react'
 
 interface PrimaryButtonProps extends ButtonProps {
-  disabled?: boolean;
+  disabled?: boolean
 }
 
 const PrimaryButton: FC<PrimaryButtonProps> = ({ disabled, children, ...props }) => {

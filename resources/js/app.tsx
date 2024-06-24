@@ -22,7 +22,7 @@ createInertiaApp({
     root.render(
       <ThemeProvider theme={defaultTheme}>
         <CssBaseline />
-        <App {...props}/>
+        <App {...props} />
       </ThemeProvider>
     )
   },

@@ -15,7 +15,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '70px', padding: '15px', color: '#3c3a3a' }}>
       <Link href={route('dashboard')} as='button'>
-        <ApplicationLogo fill='#000' width={50} height={50}/>
+        <ApplicationLogo fill='#000' width={50} height={50} />
       </Link>
       <Box
         sx={{

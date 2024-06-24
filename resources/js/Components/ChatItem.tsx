@@ -8,8 +8,8 @@ interface ChatItemProps {
     lastMessage: string
     time: string
     notifications: number
-  },
-  onSelect: () => void,
+  }
+  onSelect: () => void
   isActive: boolean
 }
 

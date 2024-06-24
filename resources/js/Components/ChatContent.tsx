@@ -78,13 +78,13 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
             border: 0,
             '& .MuiOutlinedInput-root': {
               backgroundColor: '#fff',
-              borderRadius: '10px',
-              
+              borderRadius: '10px'
+
             },
-            '& .MuiInput-underline:hover:before':{
-                border: 'none !important'
+            '& .MuiInput-underline:hover:before': {
+              border: 'none !important'
             },
-            backgroundColor: '#fff',
+            backgroundColor: '#fff'
           }}
         />
       </Box>

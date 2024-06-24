@@ -8,8 +8,8 @@ const chats = [
 ]
 
 interface ChatListProps {
-  selected: number | null;
-  onSelectChat: (id: number) => void;
+  selected: number | null
+  onSelectChat: (id: number) => void
 }
 
 const ChatList: FC<ChatListProps> = ({ selected, onSelectChat }) => {
