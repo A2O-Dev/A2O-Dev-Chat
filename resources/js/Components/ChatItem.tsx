@@ -8,8 +8,9 @@ interface ChatItemProps {
     lastMessage: string
     time: string
     notifications: number
-  }
-  onSelect: () => void
+  },
+  onSelect: () => void,
+  isActive: boolean
 }
 
 const ChatItem: FC<ChatItemProps> = ({ chat, onSelect, isActive }) => {

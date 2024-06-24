@@ -1,7 +1,11 @@
-import { Button } from '@mui/material'
-import { ButtonHTMLAttributes, FC } from 'react'
+import { Button, ButtonProps } from '@mui/material'
+import { FC } from 'react'
 
-const PrimaryButton: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ disabled, children, ...props }) => {
+interface PrimaryButtonProps extends ButtonProps {
+  disabled?: boolean;
+}
+
+const PrimaryButton: FC<PrimaryButtonProps> = ({ disabled, children, ...props }) => {
   return (
     <Button
       {...props}
@@ -9,7 +13,7 @@ const PrimaryButton: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ disabled, 
       size='small'
       disableElevation
       disabled={disabled}
-      style={{
+      sx={{
         textTransform: 'uppercase',
         fontWeight: 'bold',
         fontSize: '0.75rem',

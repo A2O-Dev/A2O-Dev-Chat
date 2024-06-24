@@ -21,7 +21,7 @@ const Register: () => void = () => {
       broadcaster: 'socket.io',
       host: window.location.hostname + ':6001'
     })
-    echo.join('test').listenForWhisper('msg', (data) => {
+    echo.join('test').listenForWhisper('msg', (data: any) => {
       console.log(data)
     })
   }, [])
