@@ -26,12 +26,12 @@ const Authenticated = ({ user, header, children }: PropsWithChildren<{ user: Use
       >
 
         {header && (
-          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#EEEEEE' }}>
+          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#EEEEEE'}}>
             {header}
           </Box>
         )}
 
-        <Box sx={{ width: '100%', height: 'calc(100vh - 140px)', backgroundColor: 'white' }}>{children}</Box>
+        <Box sx={{ width: '100%', height: 'calc(100vh - 150px)', backgroundColor: 'white' }}>{children}</Box>
       </Box>
     </Box>
   )

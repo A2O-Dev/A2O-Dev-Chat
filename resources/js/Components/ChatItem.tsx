@@ -18,7 +18,7 @@ const ChatItem: FC<ChatItemProps> = ({ chat, onSelect, isActive }) => {
     <ListItem onClick={onSelect} sx={{ height: '100%', width: '100%', cursor: 'pointer', backgroundColor: isActive ? '#002C87' : 'transparent', borderBottom: '#002C87 solid 1px' }}>
       <ListItemText sx={{ color: '#fff' }} primary={<Typography variant='h6'>{chat.name}</Typography>} secondary={<Typography>{chat.lastMessage}</Typography>} />
       {chat.notifications > 0 && (
-        <Badge badgeContent={chat.notifications} color='error' />
+        <Badge badgeContent={chat.notifications} color='error' sx={{ marginRight: 1 }} />
       )}
     </ListItem>
   )

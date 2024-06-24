@@ -67,7 +67,7 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
           </Box>
         ))}
       </Box>
-      <Box sx={{ marginTop: 4, backgroundColor: '#EEEEEE', padding: 2 }}>
+      <Box sx={{ marginTop: 4, backgroundColor: '#EEEEEE', padding: 2, borderTop: '1px solid #CCC' }}>
         <TextField
           type='text'
           fullWidth
