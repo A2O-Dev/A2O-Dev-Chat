@@ -10,16 +10,18 @@ const Authenticated = ({ user, header, children }: PropsWithChildren<{ user: Use
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        width: '100vw',
-        backgroundColor: '#fff'
+        width: '100%',
+        backgroundColor: '#fff',
+        maxWidth: '1280px',
+        margin: '0 auto'
       }}
     >
       <Navbar user={user} />
       <Box
         sx={{
           backgroundColor: '#fff',
-          height: 'calc(100vh - 60px)',
-          overflow: 'hidden'
+          height: 'calc(100vh - 70px)',
+          overflow: 'hidden',
         }}
       >
 

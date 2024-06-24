@@ -67,13 +67,25 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
           </Box>
         ))}
       </Box>
-      <Box sx={{ marginTop: 4, backgroundColor: '#EEEEEE' }}>
+      <Box sx={{ marginTop: 4, backgroundColor: '#EEEEEE', padding: 2 }}>
         <TextField
           type='text'
           fullWidth
           placeholder='Type a message'
           variant='outlined'
-          sx={{ p: 1, pl: 10 }}
+          sx={{
+            borderRadius: '10px',
+            border: 0,
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: '#fff',
+              borderRadius: '10px',
+              
+            },
+            '& .MuiInput-underline:hover:before':{
+                border: 'none !important'
+            },
+            backgroundColor: '#fff',
+          }}
         />
       </Box>
     </Box>
