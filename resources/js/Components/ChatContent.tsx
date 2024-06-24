@@ -36,7 +36,8 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
         flexDirection: 'column',
         justifyContent: 'end',
         height: '100%',
-        paddingTop: 5
+        paddingTop: 5,
+        width: '100vw'
       }}
     >
       <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>

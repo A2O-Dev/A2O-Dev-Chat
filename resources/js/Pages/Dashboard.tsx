@@ -1,20 +1,25 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { PageProps } from '@/types'
 import { FC, useState } from 'react'
-import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
+import { Box, Button, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from '@mui/material'
 import ChatList from '@/Components/ChatList'
 import ChatContent from '@/Components/ChatContent'
-import { AddCircle } from '@mui/icons-material'
+import { AddCircle, Menu } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import Modal from '@mui/material/Modal'
 
 const Dashboard: FC<PageProps> = ({ auth }) => {
   const [open, setOpen] = useState<boolean>(false)
+  const [openMobile, setOpenMobile] = useState<boolean>(false)
   const [validarEmail, setValidarEmail] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
+  const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
 
   const handleSelectChat = (id: number) => {
     setSelectedChat(id)
+    if (isMobile) {
+      setOpenMobile(false)
+    }
   }
 
   return (
@@ -71,14 +76,14 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
               width: '25%',
               height: '100%',
               backgroundColor: '#0049A8',
-              display: 'flex',
+              display: open || !isMobile ? 'flex' : 'none',
               justifyContent: 'center',
               alignItems: 'center',
               paddingInline: 2,
               borderBottom: '#002C87 2px solid'
             }}
           >
-            <Box sx={{ color: '#fff', width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ color: '#fff', width: '100%', justifyContent: 'center' }}>
               <TextField
                 sx={{
                   backgroundColor: '#5580C5',
@@ -106,6 +111,14 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
             </Box>
           </Box>
           <Box sx={{ width: '75%', height: '100%', backgroundColor: '#EEEEEE' }}>
+            {isMobile && (
+              <IconButton
+                onClick={() => setOpenMobile(prevOpen => !prevOpen)}
+                sx={{ position: 'fixed' }}
+              >
+                <Menu sx={{ color: '#0049A8' }} />
+              </IconButton>
+            )}
             <Typography
               variant='h2'
               sx={{
@@ -122,7 +135,17 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
         </Box>}
       >
         <Box sx={{ display: 'flex', height: '100%' }}>
-          <Box sx={{ position: 'relative', width: '25%', height: '100%', color: '#fff', backgroundColor: '#0049A8', boxShadow: 3 }}>
+          <Box sx={{
+            display: openMobile || !isMobile ? 'block' : 'none',
+            position: 'relative',
+            width: { xs: '100%', sm: '25%' },
+            height: '100%',
+            color: '#fff',
+            backgroundColor: '#0049A8',
+            boxShadow: 3,
+            overflowY: 'auto'
+          }}
+          >
             <ChatList selected={selectedChat} onSelectChat={handleSelectChat} />
 
             <IconButton onClick={() => setOpen(true)} sx={{ position: 'absolute', left: 10, bottom: 10 }}>
@@ -130,7 +153,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
             </IconButton>
 
           </Box>
-          <Box sx={{ width: '75%' }}>
+          <Box sx={{ width: '75%', display: openMobile && isMobile ? 'none' : 'block' }}>
             {selectedChat
               ? <ChatContent chatId={selectedChat} />
               : <Typography align='center' padding={2}>
