@@ -9,19 +9,18 @@ const Authenticated: FC<PropsWithChildren<{ user: User, header?: ReactNode }>> =
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100vh',
         width: '100%',
         backgroundColor: '#fff',
         maxWidth: '1280px',
-        margin: '0 auto'
+        margin: '0 auto',
+        overflowY: 'scroll'
       }}
     >
       <Navbar user={user} />
       <Box
         sx={{
           backgroundColor: '#fff',
-          height: 'calc(100vh - 70px)',
-          overflow: 'hidden'
+          height: 'calc(100vh - 70px)'
         }}
       >
 
