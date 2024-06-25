@@ -34,10 +34,9 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'end',
+        justifyContent: 'space-between',
         height: '100%',
-        paddingTop: 5,
-        width: '100vw'
+        paddingTop: 5
       }}
     >
       <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
@@ -45,7 +44,7 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
           <Box key={message.id} sx={{ display: 'flex', marginBottom: 1 }}>
             <Box
               sx={{
-                marginLeft: 4,
+                marginX: 3,
                 backgroundColor: '#EEEEEE',
                 padding: 2,
                 borderTopLeftRadius: 10,

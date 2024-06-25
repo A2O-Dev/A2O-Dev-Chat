@@ -10,7 +10,7 @@ import Modal from '@mui/material/Modal'
 
 const Dashboard: FC<PageProps> = ({ auth }) => {
   const [open, setOpen] = useState<boolean>(false)
-  const [openMobile, setOpenMobile] = useState<boolean>(false)
+  const [openChatList, setOpenChatList] = useState<boolean>(false)
   const [validarEmail, setValidarEmail] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
@@ -18,8 +18,12 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
   const handleSelectChat = (id: number) => {
     setSelectedChat(id)
     if (isMobile) {
-      setOpenMobile(false)
+      setOpenChatList(false)
     }
+  }
+
+  const toggleChatList: () => void = () => {
+    setOpenChatList(prevOpen => !prevOpen)
   }
 
   return (
@@ -113,7 +117,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
           <Box sx={{ width: '75%', height: '100%', backgroundColor: '#EEEEEE' }}>
             {isMobile && (
               <IconButton
-                onClick={() => setOpenMobile(prevOpen => !prevOpen)}
+                onClick={toggleChatList}
                 sx={{ position: 'fixed' }}
               >
                 <Menu sx={{ color: '#0049A8' }} />
@@ -136,7 +140,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
       >
         <Box sx={{ display: 'flex', height: '100%' }}>
           <Box sx={{
-            display: openMobile || !isMobile ? 'block' : 'none',
+            display: openChatList || !isMobile ? 'block' : 'none',
             position: 'relative',
             width: { xs: '100%', sm: '25%' },
             height: '100%',
@@ -153,7 +157,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
             </IconButton>
 
           </Box>
-          <Box sx={{ width: '75%', display: openMobile && isMobile ? 'none' : 'block' }}>
+          <Box sx={{ width: openChatList || !isMobile ? '75%' : '100%', display: openChatList && isMobile ? 'none' : 'block' }}>
             {selectedChat
               ? <ChatContent chatId={selectedChat} />
               : <Typography align='center' padding={2}>

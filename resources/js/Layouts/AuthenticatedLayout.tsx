@@ -12,7 +12,7 @@ const Authenticated = ({ user, header, children }: PropsWithChildren<{ user: Use
         height: '100vh',
         width: '100%',
         backgroundColor: '#fff',
-        maxWidth: '1280px',
+        maxWidth: '1920px',
         margin: '0 auto'
       }}
     >
