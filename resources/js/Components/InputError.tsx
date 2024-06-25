@@ -1,18 +1,11 @@
-import { Typography } from '@mui/material'
 import { FC, HTMLAttributes } from 'react'
 
-const InputError: FC<HTMLAttributes<HTMLParagraphElement> & { message?: string }> = ({ message, ...props }) => {
+const InputError: FC<HTMLAttributes<HTMLParagraphElement> & { message?: string }> = ({ message, className = '', ...props }) => {
   return message
     ? (
-      <Typography
-        {...props}
-        sx={{
-          fontSize: '0.875rem',
-          color: '#dc2626'
-        }}
-      >
+      <p {...props} className={'text-sm text-red-600 ' + className}>
         {message}
-      </Typography>
+      </p>
       )
     : null
 }

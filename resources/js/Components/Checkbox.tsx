@@ -1,7 +1,15 @@
-import { CheckboxProps, Checkbox as MuiCheckbox } from '@mui/material'
-import { FC } from 'react'
+import { FC, InputHTMLAttributes } from 'react'
 
-const Checkbox: FC<CheckboxProps> = (props) => {
-  return <MuiCheckbox {...props} />
+const Checkbox: FC<InputHTMLAttributes<HTMLInputElement>> = ({ className = '', ...props }) => {
+  return (
+    <input
+      {...props}
+      type='checkbox'
+      className={
+                'rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 ' +
+                className
+            }
+    />
+  )
 }
 export default Checkbox

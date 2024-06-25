@@ -1,18 +1,10 @@
-import { Typography } from '@mui/material'
 import { FC, LabelHTMLAttributes } from 'react'
 
-const InputLabel: FC<LabelHTMLAttributes<HTMLLabelElement> & { value?: string }> = ({ value, children, ...props }) => {
+const InputLabel: FC<LabelHTMLAttributes<HTMLLabelElement> & { value?: string }> = ({ value, className = '', children, ...props }) => {
   return (
-    <Typography
-      variant='body1' {...props} sx={{
-        display: 'block',
-        fontWeight: '500',
-        fontSize: '0.875rem',
-        color: '#4B5563'
-      }}
-    >
+    <label {...props} className={'block font-medium text-sm text-gray-700 ' + className}>
       {value || children}
-    </Typography>
+    </label>
   )
 }
 export default InputLabel

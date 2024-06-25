@@ -1,33 +1,18 @@
-import { Button, ButtonProps } from '@mui/material'
-import { FC } from 'react'
+import { ButtonHTMLAttributes, FC } from 'react'
 
-interface PrimaryButtonProps extends ButtonProps {
-  disabled?: boolean
-}
-
-const PrimaryButton: FC<PrimaryButtonProps> = ({ disabled, children, ...props }) => {
+const PrimaryButton: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ className = '', disabled, children, ...props }) => {
   return (
-    <Button
+    <button
       {...props}
-      variant='contained'
-      size='small'
-      disableElevation
+      className={
+                `inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ${
+                    disabled && 'opacity-25'
+                } ` + className
+            }
       disabled={disabled}
-      sx={{
-        textTransform: 'uppercase',
-        fontWeight: 'bold',
-        fontSize: '0.75rem',
-        letterSpacing: '0.05em',
-        backgroundColor: disabled ? '#374151' : '#1f2937',
-        color: 'white',
-        border: '1px solid transparent',
-        '&:hover': {
-          backgroundColor: disabled ? '##374151' : '#1f2937'
-        }
-      }}
     >
       {children}
-    </Button>
+    </button>
   )
 }
 export default PrimaryButton
