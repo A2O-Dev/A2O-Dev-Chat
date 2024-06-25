@@ -12,7 +12,6 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
 
-  console.log(auth)
   const handleSelectChat = (id: number): void => {
     setSelectedChat(id)
   }
