@@ -10,9 +10,9 @@ import Modal from '@mui/material/Modal'
 
 const Dashboard: FC<PageProps> = ({ auth }) => {
   const [open, setOpen] = useState<boolean>(false)
-  const [validarEmail, setValidarEmail] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
 
+  console.log(auth)
   const handleSelectChat = (id: number): void => {
     setSelectedChat(id)
   }
@@ -51,15 +51,8 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
               >
                 Nuevo Mensaje
               </Typography>
-              <TextField label='Email' variant='outlined' type='email' fullWidth disabled={validarEmail} />
-              <Button variant='outlined' disabled={validarEmail} onClick={() => setValidarEmail(true)}>Validar Email</Button>
-              {
-              validarEmail &&
-                <>
-                  <TextField label='Mensaje' variant='outlined' type='text' fullWidth />
-                  <Button variant='outlined'>Enviar</Button>
-                </>
-            }
+              <TextField label='Email' variant='outlined' type='email' fullWidth />
+              <Button variant='outlined'>Validar Email</Button>
             </Box>
           </Modal>
       }
@@ -135,9 +128,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
           <Box sx={{ width: '75%' }}>
             {selectedChat !== null
               ? <ChatContent chatId={selectedChat} />
-              : <Typography align='center' padding={2}>
-                Seleccione un chat
-              </Typography>}
+              : <Typography align='center' padding={2}>Seleccione un chat</Typography>}
           </Box>
         </Box>
       </AuthenticatedLayout>
