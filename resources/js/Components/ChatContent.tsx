@@ -63,7 +63,7 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
                 <Typography sx={{ fontWeight: 'bold' }}>
                   {message.user}
                 </Typography>
-                <Typography variant='body2' sx={{ color: 'gray', ml: 2 }}>
+                <Typography variant='body2' sx={{ color: (verifyUser(message.user) ? '#EEE' : 'gray'), ml: 2 }}>
                   {message.time}
                 </Typography>
               </Box>

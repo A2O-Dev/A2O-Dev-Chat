@@ -48,10 +48,10 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
                   fontSize: '1.25rem'
                 }}
               >
-                Nuevo Mensaje
+                New Message
               </Typography>
               <TextField label='Email' variant='outlined' type='email' fullWidth />
-              <Button variant='outlined'>Validar Email</Button>
+              <Button variant='outlined'>Validate Email</Button>
             </Box>
           </Modal>
       }
@@ -127,7 +127,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
           <Box sx={{ width: '75%' }}>
             {selectedChat !== null
               ? <ChatContent chatId={selectedChat} />
-              : <Typography align='center' padding={2}>Seleccione un chat</Typography>}
+              : <Typography align='center' padding={2}>Select a Chat</Typography>}
           </Box>
         </Box>
       </AuthenticatedLayout>
