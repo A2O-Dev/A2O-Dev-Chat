@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { PageProps } from '@/types'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Box, Button, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from '@mui/material'
 import ChatList from '@/Components/ChatList'
 import ChatContent from '@/Components/ChatContent'
@@ -13,7 +13,11 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
   const [openChatList, setOpenChatList] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
-
+  useEffect(() => {
+    if (!isMobile) {
+      setOpenChatList(false)
+    }
+  }, [isMobile])
   const handleSelectChat = (id: number): void => {
     setSelectedChat(id)
     if (isMobile) {
@@ -70,10 +74,10 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
           <Box sx={{ display: 'flex', height: '80px', width: '100%', boxShadow: 3 }}>
             <Box
               sx={{
-                width: '25%',
+                width: isMobile ? '100%' : '25%',
+                display: !isMobile || openChatList ? 'flex' : 'none',
                 height: '100%',
                 backgroundColor: '#0049A8',
-                display: open || !isMobile ? 'flex' : 'none',
                 justifyContent: 'center',
                 alignItems: 'center',
                 paddingInline: 2,
@@ -107,7 +111,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
                 />
               </Box>
             </Box>
-            <Box sx={{ width: '75%', height: '100%', backgroundColor: '#EEEEEE' }}>
+            <Box sx={{ width: isMobile ? '100%' : '75%', display: !isMobile || !openChatList ? '' : 'none', height: '100%', backgroundColor: '#EEEEEE' }}>
               {isMobile && (
                 <IconButton
                   onClick={toggleChatList}
