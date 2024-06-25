@@ -11,11 +11,10 @@ import Modal from '@mui/material/Modal'
 const Dashboard: FC<PageProps> = ({ auth }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openChatList, setOpenChatList] = useState<boolean>(false)
-  const [validarEmail, setValidarEmail] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
 
-  const handleSelectChat = (id: number) => {
+  const handleSelectChat = (id: number): void => {
     setSelectedChat(id)
     if (isMobile) {
       setOpenChatList(false)
@@ -58,85 +57,80 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
                   fontSize: '1.25rem'
                 }}
               >
-                Nuevo Mensaje
+                New Message
               </Typography>
-              <TextField label='Email' variant='outlined' type='email' fullWidth disabled={validarEmail} />
-              <Button variant='outlined' disabled={validarEmail} onClick={() => setValidarEmail(true)}>Validar Email</Button>
-              {
-              validarEmail &&
-                <>
-                  <TextField label='Mensaje' variant='outlined' type='text' fullWidth />
-                  <Button variant='outlined'>Enviar</Button>
-                </>
-            }
+              <TextField label='Email' variant='outlined' type='email' fullWidth />
+              <Button variant='outlined'>Validate Email</Button>
             </Box>
           </Modal>
       }
       <AuthenticatedLayout
         user={auth.user}
-        header={<Box sx={{ display: 'flex', height: '80px', width: '100%', boxShadow: 3 }}>
-          <Box
-            sx={{
-              width: '25%',
-              height: '100%',
-              backgroundColor: '#0049A8',
-              display: open || !isMobile ? 'flex' : 'none',
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingInline: 2,
-              borderBottom: '#002C87 2px solid'
-            }}
-          >
-            <Box sx={{ color: '#fff', width: '100%', justifyContent: 'center' }}>
-              <TextField
-                sx={{
-                  backgroundColor: '#5580C5',
-                  borderRadius: '5px',
-                  input: { color: '#fff' },
-                  '& .MuiOutlinedInput-root': {
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#fff'
-                    },
-                    '& .Mui-focused input': {
-                      fontWeight: 'bold'
-                    }
-                  }
-                }}
-                variant='outlined'
-                placeholder='Search...'
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <SearchIcon sx={{ color: '#fff' }} />
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Box>
-          </Box>
-          <Box sx={{ width: '75%', height: '100%', backgroundColor: '#EEEEEE' }}>
-            {isMobile && (
-              <IconButton
-                onClick={toggleChatList}
-                sx={{ position: 'fixed' }}
-              >
-                <Menu sx={{ color: '#0049A8' }} />
-              </IconButton>
-            )}
-            <Typography
-              variant='h2'
+        header={
+          <Box sx={{ display: 'flex', height: '80px', width: '100%', boxShadow: 3 }}>
+            <Box
               sx={{
-                fontWeight: 'fontWeightBold',
-                fontSize: '1.25rem',
-                color: 'text.secondary',
-                padding: 3,
-                textAlign: 'center'
+                width: '25%',
+                height: '100%',
+                backgroundColor: '#0049A8',
+                display: open || !isMobile ? 'flex' : 'none',
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingInline: 2,
+                borderBottom: '#002C87 2px solid'
               }}
             >
-              {auth?.user?.name}
-            </Typography>
+              <Box sx={{ color: '#fff', width: '100%', justifyContent: 'center' }}>
+                <TextField
+                  sx={{
+                    backgroundColor: '#5580C5',
+                    borderRadius: '5px',
+                    input: { color: '#fff' },
+                    '& .MuiOutlinedInput-root': {
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#fff'
+                      },
+                      '& .Mui-focused input': {
+                        fontWeight: 'bold'
+                      }
+                    }
+                  }}
+                  variant='outlined'
+                  placeholder='Search...'
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <SearchIcon sx={{ color: '#fff' }} />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box sx={{ width: '75%', height: '100%', backgroundColor: '#EEEEEE' }}>
+              {isMobile && (
+                <IconButton
+                  onClick={toggleChatList}
+                  sx={{ position: 'fixed' }}
+                >
+                  <Menu sx={{ color: '#0049A8' }} />
+                </IconButton>
+              )}
+              <Typography
+                variant='h2'
+                sx={{
+                  fontWeight: 'fontWeightBold',
+                  fontSize: '1.25rem',
+                  color: 'text.secondary',
+                  padding: 3,
+                  textAlign: 'center'
+                }}
+              >
+                {auth?.user?.name}
+              </Typography>
+            </Box>
           </Box>
-        </Box>}
+        }
       >
         <Box sx={{ display: 'flex', height: '100%' }}>
           <Box sx={{
@@ -158,11 +152,9 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
 
           </Box>
           <Box sx={{ width: openChatList || !isMobile ? '75%' : '100%', display: openChatList && isMobile ? 'none' : 'block' }}>
-            {selectedChat
+            {selectedChat !== null
               ? <ChatContent chatId={selectedChat} />
-              : <Typography align='center' padding={2}>
-                Seleccione un chat
-              </Typography>}
+              : <Typography align='center' padding={2}>Select a Chat</Typography>}
           </Box>
         </Box>
       </AuthenticatedLayout>

@@ -1,9 +1,9 @@
-import { PropsWithChildren, ReactNode } from 'react'
+import { FC, PropsWithChildren, ReactNode } from 'react'
 import { User } from '@/types'
 import { Box } from '@mui/material'
 import Navbar from '@/Components/Navbar'
 
-const Authenticated = ({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) => {
+const Authenticated: FC<PropsWithChildren<{ user: User, header?: ReactNode }>> = ({ user, header, children }) => {
   return (
     <Box
       sx={{
@@ -25,7 +25,7 @@ const Authenticated = ({ user, header, children }: PropsWithChildren<{ user: Use
         }}
       >
 
-        {header && (
+        {header !== null && (
           <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#EEEEEE' }}>
             {header}
           </Box>

@@ -13,7 +13,7 @@ const Modal: FC<PropsWithChildren<{
   closeable = true,
   onClose = () => {}
 }) => {
-  const close = () => {
+  const close = (): void => {
     if (closeable) {
       onClose()
     }
