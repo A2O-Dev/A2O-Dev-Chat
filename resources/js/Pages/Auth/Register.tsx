@@ -118,7 +118,7 @@ const Register: () => void = () => {
             Already registered?
           </Link>
 
-          <PrimaryButton className='ms-4' disabled={processing} onClick={submit}>
+          <PrimaryButton className='ms-4' disabled={processing}>
             Register
           </PrimaryButton>
         </div>
