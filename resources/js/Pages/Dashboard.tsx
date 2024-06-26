@@ -42,22 +42,23 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
             }}
             >
               <Typography
-                variant='h2'
+                variant='h3'
                 sx={{
                   fontWeight: 'fontWeightBold',
-                  fontSize: '1.25rem'
+                  fontSize: '0.875rem'
                 }}
               >
                 New Message
               </Typography>
-              <TextField label='Email' variant='outlined' type='email' fullWidth />
-              <Button variant='outlined'>Validate Email</Button>
+              <TextField label='Email' variant='outlined' type='email' fullWidth sx={{ input: { fontSize: '0.875rem' } }} />
+              <Button variant='outlined' sx={{ fontSize: '0.75rem' }}>Validate Email</Button>
             </Box>
           </Modal>
       }
       <AuthenticatedLayout
         user={auth.user}
-        header={
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', maxWidth: '1280px', marginInline: 'auto', backgroundColor: '#fff' }}>
           <Box sx={{ display: 'flex', height: '80px', width: '100%', boxShadow: 3 }}>
             <Box
               sx={{
@@ -76,7 +77,8 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
                   sx={{
                     backgroundColor: '#5580C5',
                     borderRadius: '5px',
-                    input: { color: '#fff' },
+                    width: '100%',
+                    input: { color: '#fff', fontSize: '0.875rem' },
                     '& .MuiOutlinedInput-root': {
                       '&.Mui-focused fieldset': {
                         borderColor: '#fff'
@@ -103,7 +105,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
                 variant='h2'
                 sx={{
                   fontWeight: 'fontWeightBold',
-                  fontSize: '1.25rem',
+                  fontSize: '1rem',
                   color: 'text.secondary',
                   padding: 3,
                   textAlign: 'center'
@@ -113,21 +115,20 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
               </Typography>
             </Box>
           </Box>
-        }
-      >
-        <Box sx={{ display: 'flex', height: '100%' }}>
-          <Box sx={{ position: 'relative', width: '25%', height: '100%', color: '#fff', backgroundColor: '#0049A8', boxShadow: 3 }}>
-            <ChatList selected={selectedChat} onSelectChat={handleSelectChat} />
+          <Box sx={{ display: 'flex', height: 'calc(100vh - 80px - 4rem)' }}>
+            <Box sx={{ position: 'relative', width: '25%', height: '100%', color: '#fff', backgroundColor: '#0049A8', boxShadow: 3 }}>
+              <ChatList selected={selectedChat} onSelectChat={handleSelectChat} />
 
-            <IconButton onClick={() => setOpen(true)} sx={{ position: 'absolute', left: 10, bottom: 10 }}>
-              <AddCircle sx={{ color: '#fff', width: '60px', height: '60px' }} />
-            </IconButton>
+              <IconButton onClick={() => setOpen(true)} sx={{ position: 'absolute', left: 10, bottom: 10 }}>
+                <AddCircle sx={{ color: '#fff', width: '60px', height: '60px' }} />
+              </IconButton>
 
-          </Box>
-          <Box sx={{ width: '75%' }}>
-            {selectedChat !== null
-              ? <ChatContent chatId={selectedChat} />
-              : <Typography align='center' padding={2}>Select a Chat</Typography>}
+            </Box>
+            <Box sx={{ width: '75%' }}>
+              {selectedChat !== null
+                ? <ChatContent chatId={selectedChat} />
+                : <Typography align='center' padding={2}>Select a Chat</Typography>}
+            </Box>
           </Box>
         </Box>
       </AuthenticatedLayout>

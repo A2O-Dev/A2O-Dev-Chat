@@ -60,14 +60,14 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography sx={{ fontWeight: 'bold' }}>
+                <Typography sx={{ fontWeight: 'bold', fontSize: '0.875rem' }}>
                   {message.user}
                 </Typography>
-                <Typography variant='body2' sx={{ color: (verifyUser(message.user) ? '#EEE' : 'gray'), ml: 2 }}>
+                <Typography variant='body2' sx={{ fontSize: '0.75rem', color: (verifyUser(message.user) ? '#EEE' : 'gray'), ml: 2 }}>
                   {message.time}
                 </Typography>
               </Box>
-              <Typography variant='body1'>
+              <Typography variant='body1' sx={{ fontSize: '0.75rem' }}>
                 {message.content}
               </Typography>
             </Box>
@@ -81,7 +81,9 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
           placeholder='Type a message'
           variant='outlined'
           sx={{
+            input: { fontSize: '0.875rem' },
             borderRadius: '10px',
+            fontSize: '0.875rem',
             border: 0,
             '& .MuiOutlinedInput-root': {
               backgroundColor: '#fff',
