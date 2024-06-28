@@ -55,10 +55,8 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
             }}
             >
               <Typography
-                variant='h2'
                 sx={{
-                  fontWeight: 'fontWeightBold',
-                  fontSize: '1.25rem'
+                  fontWeight: 'fontWeightBold'
                 }}
               >
                 New Message
@@ -70,7 +68,8 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
       }
       <AuthenticatedLayout
         user={auth.user}
-        header={
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', maxWidth: '1920px', marginInline: 'auto', backgroundColor: '#fff' }}>
           <Box sx={{ display: 'flex', height: '80px', width: '100%', boxShadow: 3 }}>
             <Box
               sx={{
@@ -84,11 +83,12 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
                 borderBottom: '#002C87 2px solid'
               }}
             >
-              <Box sx={{ color: '#fff', width: '100%', justifyContent: 'center' }}>
+              <Box sx={{ color: '#fff', width: '100%', display: 'flex', justifyContent: 'center' }}>
                 <TextField
                   sx={{
                     backgroundColor: '#5580C5',
                     borderRadius: '5px',
+                    width: '100%',
                     input: { color: '#fff' },
                     '& .MuiOutlinedInput-root': {
                       '&.Mui-focused fieldset': {
@@ -121,10 +121,8 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
                 </IconButton>
               )}
               <Typography
-                variant='h2'
                 sx={{
                   fontWeight: 'fontWeightBold',
-                  fontSize: '1.25rem',
                   color: 'text.secondary',
                   padding: 3,
                   textAlign: 'center'
@@ -134,31 +132,30 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
               </Typography>
             </Box>
           </Box>
-        }
-      >
-        <Box sx={{ display: 'flex', height: '100%' }}>
-          <Box sx={{
-            display: openChatList || !isMobile ? 'block' : 'none',
-            position: 'relative',
-            width: { xs: '100%', sm: '25%' },
-            height: '100%',
-            color: '#fff',
-            backgroundColor: '#0049A8',
-            boxShadow: 3,
-            overflowY: 'auto'
-          }}
-          >
-            <ChatList selected={selectedChat} onSelectChat={handleSelectChat} />
+          <Box sx={{ display: 'flex', height: 'calc(100vh - 80px - 4rem)' }}>
+            <Box sx={{
+              display: openChatList || !isMobile ? 'block' : 'none',
+              position: 'relative',
+              width: { xs: '100%', sm: '25%' },
+              height: '100%',
+              color: '#fff',
+              backgroundColor: '#0049A8',
+              boxShadow: 3,
+              overflowY: 'auto'
+            }}
+            >
+              <ChatList selected={selectedChat} onSelectChat={handleSelectChat} />
 
-            <IconButton onClick={() => setOpen(true)} sx={{ position: 'absolute', left: 10, bottom: 10 }}>
-              <AddCircle sx={{ color: '#fff', width: '60px', height: '60px' }} />
-            </IconButton>
+              <IconButton onClick={() => setOpen(true)} sx={{ position: 'absolute', left: 10, bottom: 10 }}>
+                <AddCircle sx={{ color: '#fff', width: '60px', height: '60px' }} />
+              </IconButton>
 
-          </Box>
-          <Box sx={{ width: openChatList || !isMobile ? '75%' : '100%', display: openChatList && isMobile ? 'none' : 'block' }}>
-            {selectedChat !== null
-              ? <ChatContent chatId={selectedChat} />
-              : <Typography align='center' padding={2}>Select a Chat</Typography>}
+            </Box>
+            <Box sx={{ width: openChatList || !isMobile ? '75%' : '100%', display: openChatList && isMobile ? 'none' : 'block' }}>
+              {selectedChat !== null
+                ? <ChatContent chatId={selectedChat} />
+                : <Typography align='center' padding={2}>Select a Chat</Typography>}
+            </Box>
           </Box>
         </Box>
       </AuthenticatedLayout>
