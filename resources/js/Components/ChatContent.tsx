@@ -48,8 +48,8 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
           <Box key={message.id} sx={{ display: 'flex', marginBottom: 1, justifyContent: (verifyUser(message.user) ? 'end' : 'start') }}>
             <Box
               sx={{
-                marginLeft: (verifyUser(message.user) ? 0 : 4),
-                marginRight: (verifyUser(message.user) ? 4 : 2),
+                marginLeft: (verifyUser(message.user) ? 3 : 1),
+                marginRight: (verifyUser(message.user) ? 1 : 3),
                 backgroundColor: (verifyUser(message.user) ? '#0049A8' : '#EEEEEE'),
                 color: (verifyUser(message.user) ? '#fff' : '#000'),
                 padding: 2,
@@ -60,14 +60,14 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography sx={{ fontWeight: 'bold', fontSize: '0.875rem' }}>
+                <Typography sx={{ fontWeight: 'bold' }}>
                   {message.user}
                 </Typography>
-                <Typography variant='body2' sx={{ fontSize: '0.75rem', color: (verifyUser(message.user) ? '#EEE' : 'gray'), ml: 2 }}>
+                <Typography variant='body2' sx={{ color: (verifyUser(message.user) ? '#EEE' : 'black'), ml: 2 }}>
                   {message.time}
                 </Typography>
               </Box>
-              <Typography variant='body1' sx={{ fontSize: '0.75rem' }}>
+              <Typography variant='body1'>
                 {message.content}
               </Typography>
             </Box>
@@ -81,9 +81,7 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
           placeholder='Type a message'
           variant='outlined'
           sx={{
-            input: { fontSize: '0.875rem' },
             borderRadius: '10px',
-            fontSize: '0.875rem',
             border: 0,
             '& .MuiOutlinedInput-root': {
               backgroundColor: '#fff',
