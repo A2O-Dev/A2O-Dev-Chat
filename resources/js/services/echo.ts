@@ -13,7 +13,7 @@ const echo = new Echo({
 
 echo.connector.socket.on('connect', () => {
   console.log('WebSocket connection established')
-}).on('error', (error) => {
+}).on('error', (error: any) => {
   console.error('WebSocket connection error:', error)
 })
 

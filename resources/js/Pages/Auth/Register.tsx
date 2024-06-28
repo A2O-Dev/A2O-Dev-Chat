@@ -5,8 +5,6 @@ import InputLabel from '@/Components/InputLabel'
 import PrimaryButton from '@/Components/PrimaryButton'
 import TextInput from '@/Components/TextInput'
 import { Head, Link, useForm } from '@inertiajs/react'
-import Echo from "laravel-echo";
-import io from "socket.io-client";
 
 const Register: () => void = () => {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -15,16 +13,6 @@ const Register: () => void = () => {
     password: '',
     password_confirmation: ''
   })
-    useEffect(() => {
-        const echo = new Echo({
-            client: io,
-            broadcaster: 'socket.io',
-            host: window.location.hostname + ':6001'
-        })
-        echo.join('test').listenForWhisper('msg', (data) => {
-            console.log(data)
-        });
-    }, [])
   useEffect(() => {
     return () => {
       reset('password', 'password_confirmation')
