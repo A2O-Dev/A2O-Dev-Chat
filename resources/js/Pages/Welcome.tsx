@@ -1,5 +1,8 @@
 import { Link, Head } from '@inertiajs/react'
 import { PageProps } from '@/types'
+import { FC, useEffect, useState } from 'react'
+import Echo from 'laravel-echo'
+import io from 'socket.io-client'
 
 // @ts-expect-error
 const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ auth, laravelVersion, phpVersion }) => {
@@ -9,6 +12,19 @@ const Welcome: PageProps<{ laravelVersion: string, phpVersion: string }> = ({ au
     document.getElementById('docs-card-content')?.classList.add('!flex-row')
     document.getElementById('background')?.classList.add('!hidden')
   }
+  useEffect(() => {
+    const echo = new Echo({
+      client: io,
+      broadcaster: 'socket.io',
+      host: window.location.hostname + ':6001'
+    })
+
+    echo.channel('chat')
+      .listen('MessageSent', (e: any) => {
+        console.log({ e })
+      })
+
+  }, [])
 
   return (
     <>

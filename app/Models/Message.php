@@ -9,6 +9,8 @@ class Message extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['message', 'room_id', 'user_id'];
+
     /**
      * @return BelongsTo
      */

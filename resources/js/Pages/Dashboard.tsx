@@ -7,16 +7,42 @@ import ChatContent from '@/Components/ChatContent'
 import { AddCircle, Menu } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import Modal from '@mui/material/Modal'
+import Echo from 'laravel-echo'
+import io from 'socket.io-client'
 
 const Dashboard: FC<PageProps> = ({ auth }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openChatList, setOpenChatList] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
-  useEffect(() => {
+  useEffect(async () => {
     if (!isMobile) {
       setOpenChatList(false)
     }
+    
+
+    const result = await axios.post('/message', {
+        message: 'Hello, world!',
+        room_id: 1,
+        user_id: 1,
+    }).then(response => {
+          console.log(response.data.status);
+          this.setState({
+              messages: this.state.messages.concat(_message)
+          });
+        });
+
+    const echo = new Echo({
+      client: io,
+      broadcaster: 'socket.io',
+      host: window.location.hostname + ':6001'
+    })
+    
+    echo.channel('chat')
+      .listen('MessageSent', (e: any) => {
+        console.log({ e })
+      })
+
   }, [isMobile])
   const handleSelectChat = (id: number): void => {
     setSelectedChat(id)
