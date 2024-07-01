@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Inertia\Response;
+
+class MessageController extends Controller
+{
+    public function sendMessage(Request $request)
+    {
+        $message = $request->input('message');
+        event(new MessageSent($message));
+        return response()->json(['status' => 'Message Sent!']);
+    }
+}
