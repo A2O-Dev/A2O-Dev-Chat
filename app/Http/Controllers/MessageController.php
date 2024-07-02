@@ -20,15 +20,19 @@ class MessageController extends Controller
     public function getMessages()
     {
         try {
-
             $messages = Message::all();
-
+            Log::info('Messages retrieved successfully', [
+                'count' => $messages->count(),
+                'user_id' => auth()->user()->id,
+                'request_ip' => request()->ip()
+            ]);
             return response()->json($messages, 200);
         } catch (Exception $e) {
-            Log::error("Error getting messages: {$e->getMessage()}", [
-                'exception' => $e,
+            Log::error('Error retrieving messages', [
+                'exception' => $e->getMessage(),
+                'user_id' => auth()->user()->id ?? 'guest',
+                'request_ip' => request()->ip()
             ]);
-
             return response()->json(['error' => 'Failed to retrieve messages'], 500);
         }
     }
@@ -48,14 +52,22 @@ class MessageController extends Controller
         ]);
 
         if ($validator->fails()) {
+            Log::warning('Message send validation failed', [
+                'errors' => $validator->errors(),
+                'user_id' => auth()->user()->id ?? 'guest',
+                'request_ip' => request()->ip()
+            ]);
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
         DB::beginTransaction();
 
         try {
-            Log::debug("Entra al controlador sendMessage");
-
+            Log::debug('Sending message', [
+                'request' => $request->all(),
+                'user_id' => auth()->user()->id ?? 'guest',
+                'request_ip' => request()->ip()
+            ]);
             $message = Message::create([
                 'message' => $request->input('message'),
                 'room_id' => $request->input('room_id'),
@@ -65,16 +77,19 @@ class MessageController extends Controller
             event(new MessageSent($message));
 
             DB::commit();
-
+            Log::info('Message sent successfully', [
+                'message_id' => $message->id,
+                'user_id' => auth()->user()->id ?? 'guest',
+                'request_ip' => request()->ip()
+            ]);
             return response()->json(['status' => 'Message Sent!'], 200);
         } catch (Exception $e) {
-
             DB::rollBack();
-
-            Log::error("Error when sending the message: {$e->getMessage()}", [
-                'exception' => $e,
+            Log::error('Error sending message', [
+                'exception' => $e->getMessage(),
+                'user_id' => auth()->user()->id ?? 'guest',
+                'request_ip' => request()->ip()
             ]);
-
             return response()->json(['error' => 'Failed to send message'], 500);
         }
     }

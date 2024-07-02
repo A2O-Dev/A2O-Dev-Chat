@@ -13,6 +13,7 @@ const Register: () => void = () => {
     password: '',
     password_confirmation: ''
   })
+
   useEffect(() => {
     return () => {
       reset('password', 'password_confirmation')
