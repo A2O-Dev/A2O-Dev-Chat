@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\MessageController;
 use App\Models\Message;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\MessageController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/message', [MessageController::class, 'sendMessage'])->middleware(['auth', 'verified']);
+Route::get('/messages', [MessageController::class, 'getMessages'])->middleware(['auth', 'verified']);
 
 
 
