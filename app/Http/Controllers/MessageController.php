@@ -13,6 +13,27 @@ use Illuminate\Support\Facades\Validator;
 class MessageController extends Controller
 {
     /**
+     * Get all messages.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getMessages()
+    {
+        try {
+
+            $messages = Message::all();
+
+            return response()->json($messages, 200);
+        } catch (Exception $e) {
+            Log::error("Error getting messages: {$e->getMessage()}", [
+                'exception' => $e,
+            ]);
+
+            return response()->json(['error' => 'Failed to retrieve messages'], 500);
+        }
+    }
+
+    /**
      * Send a message.
      *
      * @param Request $request
