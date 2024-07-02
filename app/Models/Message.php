@@ -11,6 +11,8 @@ class Message extends Model
 
     protected $fillable = ['message', 'room_id', 'user_id'];
 
+    protected $guarded = [];
+
     /**
      * @return BelongsTo
      */

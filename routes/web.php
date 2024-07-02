@@ -16,18 +16,12 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/fire', function () {
-    $message = Message::create([
-        'message' => 'asdfasdf',
-        'room_id' => 1,
-        'user_id' => 1
-    ]);
-    event(new \App\Events\MessageSent($message));
-    return 'oksdf';
-});
-
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $data = [
+        'messages' => Message::all()
+    ];
+
+    return Inertia::render('Dashboard', $data);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

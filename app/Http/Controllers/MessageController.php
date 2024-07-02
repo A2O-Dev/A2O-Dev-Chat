@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
+use App\Http\Requests\SendMessageRequest;
 use App\Models\Message;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 class MessageController extends Controller
 {
@@ -43,23 +43,8 @@ class MessageController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendMessage(Request $request)
+    public function sendMessage(SendMessageRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'message' => 'required|string|max:255',
-            'room_id' => 'required|integer|exists:rooms,id',
-            'user_id' => 'required|integer|exists:users,id',
-        ]);
-
-        if ($validator->fails()) {
-            Log::warning('Message send validation failed', [
-                'errors' => $validator->errors(),
-                'user_id' => auth()->user()->id ?? 'guest',
-                'request_ip' => request()->ip()
-            ]);
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
         DB::beginTransaction();
 
         try {
@@ -68,11 +53,7 @@ class MessageController extends Controller
                 'user_id' => auth()->user()->id ?? 'guest',
                 'request_ip' => request()->ip()
             ]);
-            $message = Message::create([
-                'message' => $request->input('message'),
-                'room_id' => $request->input('room_id'),
-                'user_id' => $request->input('user_id'),
-            ]);
+            $message = Message::create($request->validated());
 
             event(new MessageSent($message));
 
