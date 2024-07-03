@@ -7,11 +7,13 @@ import ChatContent from '@/Components/ChatContent'
 import { AddCircle, Menu } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import Modal from '@mui/material/Modal'
+import { router } from '@inertiajs/react'
 
-const Dashboard: FC<PageProps> = ({ auth, room, rooms, messages }) => {
+const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
+  console.log(messages)
   const [open, setOpen] = useState<boolean>(false)
   const [openChatList, setOpenChatList] = useState<boolean>(false)
-  const [selectedChat, setSelectedChat] = useState<number | null>(null)
+  const [selectedChat, setSelectedChat] = useState<number | null>(room)
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
   useEffect(() => {
     if (!isMobile) {
@@ -20,6 +22,14 @@ const Dashboard: FC<PageProps> = ({ auth, room, rooms, messages }) => {
   }, [isMobile])
   const handleSelectChat = (id: number): void => {
     setSelectedChat(id)
+
+    router.get(`/dashboard/${id}`, {}, {
+      preserveState: true,
+      replace: true,
+      onError: (error) => {
+        console.log(error)
+      }
+    })
     if (isMobile) {
       setOpenChatList(false)
     }
@@ -144,7 +154,7 @@ const Dashboard: FC<PageProps> = ({ auth, room, rooms, messages }) => {
               overflowY: 'auto'
             }}
             >
-              <ChatList selected={selectedChat} onSelectChat={handleSelectChat} />
+              <ChatList rooms={rooms} selected={selectedChat} onSelectChat={handleSelectChat} />
 
               <IconButton onClick={() => setOpen(true)} sx={{ position: 'absolute', left: 10, bottom: 10 }}>
                 <AddCircle sx={{ color: '#fff', width: '60px', height: '60px' }} />
@@ -153,7 +163,7 @@ const Dashboard: FC<PageProps> = ({ auth, room, rooms, messages }) => {
             </Box>
             <Box sx={{ width: openChatList || !isMobile ? '75%' : '100%', display: openChatList && isMobile ? 'none' : 'block' }}>
               {selectedChat !== null
-                ? <ChatContent chatId={selectedChat} />
+                ? <ChatContent messages={messages} />
                 : <Typography align='center' padding={2}>Select a Chat</Typography>}
             </Box>
           </Box>

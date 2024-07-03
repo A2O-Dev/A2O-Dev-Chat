@@ -14,15 +14,16 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard/{configuration}', function (Room $room) {
+Route::get('/dashboard/{room?}', function (\App\Models\Room $room = null) {
     $user = Auth::user();
     $rooms = $user->rooms;
-    $messages = $room->messages();
+
     $data = [
         'rooms' => $rooms,
-        'room'  => $room,
-        'messages' => $messages
+        'room'  => $room->load('messages') ?? [],
+        'messages' => $room->messages ?? []
     ];
+
     return Inertia::render('Dashboard', $data);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -33,7 +34,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::post('/test', function (Request $request, App\Models\Room $room) {
     return back()->withErrors(['error' => 'message has not been sent']);
-    return redirect()->route('dashboard', ['room' => $room]);
+    return redirect()->route('dashboard', ['room' => $room->id]);
     return Inertia::render('Dashboard', [
         'RoomList' => [],
         'ChatMessages' => []
