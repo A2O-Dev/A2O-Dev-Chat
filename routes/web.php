@@ -19,21 +19,14 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard/{room?}', function (Room $room = null) {
-    if ($room) {
-        $room->load('messages');
-        $messages = $room->messages;
-    } else {
-        $room = null;
-        $messages = null;
-    }
     $user = Auth::user();
     $rooms = $user->rooms()->with(['messages' => function ($query) {
         $query->latest()->take(1);
     }])->get();
     $data = [
         'rooms' => $rooms,
-        'messages' => $messages,
-        'room' => $room
+        'messages' => $room->messages ?? [],
+        'room' => $room->load('messages') ?? []
     ];
     return Inertia::render('Dashboard', $data);
 })->middleware(['auth', 'verified'])->name('dashboard');

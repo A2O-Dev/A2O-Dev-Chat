@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\MessageSent;
 use App\Http\Requests\SendMessageRequest;
 use App\Models\Message;
+use App\Models\Room;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,18 +57,20 @@ class MessageController extends Controller
                 'request_ip' => request()->ip()
             ]);
             $message = Message::create($request->validated());
-            $messages = Message::where('room_id', $request->room_id)->get();
 
             event(new MessageSent($message));
 
             DB::commit();
             Log::info('Message sent successfully', [
                 'message_id' => $message->id,
-                'user_id' => auth()->user()->id ?? 'guest',
+                'user_id' => auth()->user()->id,
                 'request_ip' => request()->ip()
             ]);
 
-            return redirect()->route('dashboard', ['messages' => $messages]);
+            return redirect()->route('dashboard', [
+                'messages' => $message->room->messages,
+                'room' => $message->room->load('messages')
+            ]);
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error sending message', [

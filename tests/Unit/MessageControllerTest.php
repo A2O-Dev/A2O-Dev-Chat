@@ -54,7 +54,6 @@ class MessageControllerTest extends TestCase
     // Then
     $response->assertStatus(302);
     $this->assertDatabaseHas('messages', $data);
-
     Event::assertDispatched(MessageSent::class);
   }
 
