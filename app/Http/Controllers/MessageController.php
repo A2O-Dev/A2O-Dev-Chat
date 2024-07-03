@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\MessageSent;
 use App\Http\Requests\SendMessageRequest;
 use App\Models\Message;
-use App\Models\Room;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 

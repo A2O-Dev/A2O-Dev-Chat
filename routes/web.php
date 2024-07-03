@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Message;
 use App\Models\Room;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
