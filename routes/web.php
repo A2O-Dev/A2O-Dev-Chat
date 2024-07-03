@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Message;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -19,8 +20,11 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $user = Auth::user();
     $rooms = $user->rooms;
+    $messages = Message::where('user_id', $user->id)->get();
     $data = [
-        'rooms' => $rooms
+        'rooms' => $rooms,
+        'messages' => $messages,
+        'room' => []
     ];
     return Inertia::render('Dashboard', $data);
 })->middleware(['auth', 'verified'])->name('dashboard');

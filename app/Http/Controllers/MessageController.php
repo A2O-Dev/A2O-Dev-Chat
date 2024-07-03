@@ -7,6 +7,7 @@ use App\Http\Requests\SendMessageRequest;
 use App\Models\Message;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -45,6 +46,7 @@ class MessageController extends Controller
      */
     public function sendMessage(SendMessageRequest $request)
     {
+
         DB::beginTransaction();
 
         try {
@@ -54,6 +56,7 @@ class MessageController extends Controller
                 'request_ip' => request()->ip()
             ]);
             $message = Message::create($request->validated());
+            $messages = Message::where('room_id', $request->room_id)->get();
 
             event(new MessageSent($message));
 
@@ -63,7 +66,8 @@ class MessageController extends Controller
                 'user_id' => auth()->user()->id ?? 'guest',
                 'request_ip' => request()->ip()
             ]);
-            return response()->json(['status' => 'Message Sent!'], 200);
+
+            return redirect()->route('dashboard', ['messages' => $messages]);
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error sending message', [
@@ -71,7 +75,7 @@ class MessageController extends Controller
                 'user_id' => auth()->user()->id ?? 'guest',
                 'request_ip' => request()->ip()
             ]);
-            return response()->json(['error' => 'Failed to send message'], 500);
+            return back()->withErrors(['error' => 'message has not been sent']);
         }
     }
 }

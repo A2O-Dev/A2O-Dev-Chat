@@ -52,8 +52,8 @@ class MessageControllerTest extends TestCase
     $response = $this->postJson('/message', $data);
 
     // Then
-    $response->assertStatus(200);
-    $response->assertJson(['status' => 'Message Sent!']);
+    $response->assertStatus(302);
+    $this->assertDatabaseHas('messages', $data);
 
     Event::assertDispatched(MessageSent::class);
   }
