@@ -19,7 +19,9 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $user = Auth::user();
-    $rooms = $user->rooms;
+    $rooms = $user->rooms()->with(['messages' => function ($query) {
+        $query->latest()->take(1);
+    }])->get();
     $messages = Message::where('user_id', $user->id)->get();
     $data = [
         'rooms' => $rooms,
