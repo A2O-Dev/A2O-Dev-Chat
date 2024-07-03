@@ -1,6 +1,7 @@
 
 import { Box, TextField, Typography } from '@mui/material'
 import { FC } from 'react'
+import { router, usePage } from '@inertiajs/react'
 
 interface Message {
   id: number
@@ -32,6 +33,18 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
   const verifyUser = (user: string): boolean => {
     // This must be changed by the user id or name
     return user === 'Alex Hunt'
+  }
+  const { errors } = usePage().props
+  console.log(errors)
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    router.post('/test', e.target.value, {
+      preserveState: true,
+      replace: true,
+      onError: (error) => {
+        console.log(error)
+      }
+    })
   }
   return (
     <Box
@@ -75,25 +88,27 @@ const ChatContent: FC<{ chatId: number }> = ({ chatId }) => {
         ))}
       </Box>
       <Box sx={{ marginTop: 4, backgroundColor: '#EEEEEE', padding: 2, borderTop: '1px solid #CCC' }}>
-        <TextField
-          type='text'
-          fullWidth
-          placeholder='Type a message'
-          variant='outlined'
-          sx={{
-            borderRadius: '10px',
-            border: 0,
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: '#fff',
-              borderRadius: '10px'
+        <form onSubmit={handleSubmit}>
+          <TextField
+            type='text'
+            fullWidth
+            placeholder='Type a message'
+            variant='outlined'
+            sx={{
+              borderRadius: '10px',
+              border: 0,
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: '#fff',
+                borderRadius: '10px'
 
-            },
-            '& .MuiInput-underline:hover:before': {
-              border: 'none !important'
-            },
-            backgroundColor: '#fff'
-          }}
-        />
+              },
+              '& .MuiInput-underline:hover:before': {
+                border: 'none !important'
+              },
+              backgroundColor: '#fff'
+            }}
+          />
+        </form>
       </Box>
     </Box>
   )

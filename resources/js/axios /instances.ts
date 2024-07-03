@@ -1,7 +1,10 @@
 import axios from 'axios'
 
-export const mainApi = axios.create({
-  params: {
-    reload: 1
+const instance = axios.create({
+  baseURL: 'http://localhost',
+  withCredentials: true,
+  headers: {
+    'X-CSRF-TOKEN': csrfToken
   }
 })
+export default mainApi

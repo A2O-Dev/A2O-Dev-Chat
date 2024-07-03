@@ -14,8 +14,16 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+Route::get('/dashboard/{configuration}', function (Room $room) {
+    $user = Auth::user();
+    $rooms = $user->rooms;
+    $messages = $room->messages();
+    $data = [
+        'rooms' => $rooms,
+        'room'  => $room,
+        'messages' => $messages
+    ];
+    return Inertia::render('Dashboard', $data);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -23,7 +31,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::post('/test', function (Request $request) {
-    return response()->json(['message' => 'Datos recibidos correctamente']);
+Route::post('/test', function (Request $request, App\Models\Room $room) {
+    return back()->withErrors(['error' => 'message has not been sent']);
+    return redirect()->route('dashboard', ['room' => $room]);
+    return Inertia::render('Dashboard', [
+        'RoomList' => [],
+        'ChatMessages' => []
+    ]);
+    //return response()->json(['message' => 'Datos recibidos correctamente']);
+
 });
 require __DIR__ . '/auth.php';

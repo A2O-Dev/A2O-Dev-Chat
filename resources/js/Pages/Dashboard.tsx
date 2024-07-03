@@ -7,9 +7,8 @@ import ChatContent from '@/Components/ChatContent'
 import { AddCircle, Menu } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import Modal from '@mui/material/Modal'
-import axios from 'axios'
-import { mainApi } from '@/axios'
-const Dashboard: FC<PageProps> = ({ auth }) => {
+
+const Dashboard: FC<PageProps> = ({ auth, room, rooms, messages }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openChatList, setOpenChatList] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
@@ -29,17 +28,6 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
   const toggleChatList: () => void = () => {
     setOpenChatList(prevOpen => !prevOpen)
   }
-  useEffect(() => {
-    const sendData = async () => {
-      try {
-        const response = await mainApi.post('/test', { name: 'John Doe', email: 'john.doe@example.com' })
-        console.log(response.data)
-      } catch (err) {
-        console.error(err)
-      }
-    }
-    sendData()
-  }, [])
 
   return (
     <>
