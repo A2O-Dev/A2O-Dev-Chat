@@ -67,10 +67,7 @@ class MessageController extends Controller
                 'request_ip' => request()->ip()
             ]);
 
-            return redirect()->route('dashboard', [
-                'messages' => $message->room->messages,
-                'room' => $message->room->load('messages')
-            ]);
+            return redirect()->route('dashboard', ['room' => $message->room->load('messages')]);
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error sending message', [
