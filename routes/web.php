@@ -37,8 +37,5 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/message', [MessageController::class, 'sendMessage'])->middleware(['auth', 'verified']);
-Route::get('/messages', [MessageController::class, 'getMessages'])->middleware(['auth', 'verified']);
-
-
 
 require __DIR__ . '/auth.php';

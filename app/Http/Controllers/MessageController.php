@@ -13,35 +13,10 @@ use Illuminate\Support\Facades\Log;
 class MessageController extends Controller
 {
     /**
-     * Get all messages.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getMessages()
-    {
-        try {
-            $messages = Message::all();
-            Log::info('Messages retrieved successfully', [
-                'count' => $messages->count(),
-                'user_id' => auth()->user()->id,
-                'request_ip' => request()->ip()
-            ]);
-            return response()->json($messages, 200);
-        } catch (Exception $e) {
-            Log::error('Error retrieving messages', [
-                'exception' => $e->getMessage(),
-                'user_id' => auth()->user()->id ?? 'guest',
-                'request_ip' => request()->ip()
-            ]);
-            return response()->json(['error' => 'Failed to retrieve messages'], 500);
-        }
-    }
-
-    /**
      * Send a message.
      *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param SendMessageRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function sendMessage(SendMessageRequest $request)
     {
@@ -65,7 +40,7 @@ class MessageController extends Controller
                 'request_ip' => request()->ip()
             ]);
 
-            return redirect()->route('dashboard', ['room' => $message->room->load('messages')]);
+            return redirect()->route('dashboard', ['room' => $request->room_id]);
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error sending message', [
