@@ -20,7 +20,7 @@ class MessageController extends Controller
      */
     public function sendMessage(SendMessageRequest $request)
     {
-        return back()->withErrors(['error' => 'message has not been sent']);
+
         DB::beginTransaction();
 
         try {

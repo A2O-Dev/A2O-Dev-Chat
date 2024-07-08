@@ -3,8 +3,10 @@ import { Box, Snackbar, TextField, Typography } from '@mui/material'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { router, usePage } from '@inertiajs/react'
 import moment from 'moment'
-import _ from 'lodash'
 
+interface ErrorProps {
+  [key: string]: string | undefined
+}
 interface Props {
   messages: any[]
   room: object
@@ -14,9 +16,13 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
   const [message, setMessage] = useState('')
   const [open, setOpen] = useState(false)
   const user = usePage().props.auth.user
-  const { errors } = usePage().props
+  const { errors } = usePage().props as { errors: ErrorProps }
+  const isObjectEmpty = (obj: Record<string, unknown> | null | undefined): boolean => {
+    return (obj == null) || (typeof obj === 'object' && (Object.keys(obj).length === 0))
+  }
+
   useEffect(() => {
-    if (!_.isEmpty(errors)) {
+    if (!isObjectEmpty(errors)) {
       setOpen(true)
     }
   }, [errors])
