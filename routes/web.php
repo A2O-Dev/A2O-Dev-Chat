@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Room;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,16 +17,17 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard/{room?}', function (\App\Models\Room $room = null) {
+Route::get('/dashboard/{room?}', function (Room $room = null) {
     $user = Auth::user();
-    $rooms = $user->rooms;
+    $rooms = $user->rooms()->with(['messages' => function ($query) {
+        $query->latest()->take(1);
+    }])->get();
 
     $data = [
         'rooms' => $rooms,
-        'room'  => $room->load('messages') ?? [],
-        'messages' => $room->messages ?? []
+        'messages' => isset($room) ? $room->messages()->with('user')->get() : [],
+        'room' => $room ? $room->load('messages') : []
     ];
-
     return Inertia::render('Dashboard', $data);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -32,14 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::post('/test', function (Request $request, App\Models\Room $room) {
-    return back()->withErrors(['error' => 'message has not been sent']);
-    return redirect()->route('dashboard', ['room' => $room->id]);
-    return Inertia::render('Dashboard', [
-        'RoomList' => [],
-        'ChatMessages' => []
-    ]);
-    //return response()->json(['message' => 'Datos recibidos correctamente']);
 
-});
+Route::post('/message', [MessageController::class, 'sendMessage'])->middleware(['auth', 'verified']);
+
 require __DIR__ . '/auth.php';

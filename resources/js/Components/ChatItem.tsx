@@ -5,8 +5,8 @@ interface ChatItemProps {
   chat: {
     id: number
     name: string
-    lastMessage: string
-    time: string
+    messages: Object
+    created_at: string
     notifications: number
   }
   onSelect: () => void
@@ -16,7 +16,7 @@ interface ChatItemProps {
 const ChatItem: FC<ChatItemProps> = ({ chat, onSelect, isActive }) => {
   return (
     <ListItem onClick={onSelect} sx={{ height: '100%', width: '100%', cursor: 'pointer', backgroundColor: isActive ? '#002C87' : 'transparent', borderBottom: '#002C87 solid 1px' }}>
-      <ListItemText sx={{ color: '#fff' }} primary={<Typography variant='h6' sx={{ fontSize: '0.875rem' }}>{chat.name}</Typography>} secondary={<Typography>'I prepared some var...'</Typography>} />
+      <ListItemText sx={{ color: '#fff' }} primary={<Typography variant='h6' sx={{ fontSize: '0.875rem' }}>{chat.name}</Typography>} secondary={<Typography noWrap>{chat.messages[0].message}</Typography>} />
       {chat.notifications > 0 && (
         <Badge badgeContent={chat.notifications} color='error' sx={{ marginRight: 1 }} />
       )}

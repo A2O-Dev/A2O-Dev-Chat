@@ -7,32 +7,48 @@ import ChatContent from '@/Components/ChatContent'
 import { AddCircle, Menu } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import Modal from '@mui/material/Modal'
-import { router } from '@inertiajs/react'
+import { router, usePage } from '@inertiajs/react'
+import echo from '../services/echo'
 
 const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
-  console.log(messages)
   const [open, setOpen] = useState<boolean>(false)
   const [openChatList, setOpenChatList] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | null>(room)
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
+  const user = usePage().props.auth.user
+
+  useEffect(() => {
+    echo.channel('chat')
+      .listen('MessageSent', (e: any) => {
+        if (e.message.user_id !== user.id) {
+          goToChat(room?.id)
+        }
+      })
+  }, [])
+
   useEffect(() => {
     if (!isMobile) {
       setOpenChatList(false)
     }
   }, [isMobile])
+
   const handleSelectChat = (id: number): void => {
     setSelectedChat(id)
+    goToChat(id)
 
-    router.get(`/dashboard/${id}`, {}, {
+    if (isMobile) {
+      setOpenChatList(false)
+    }
+  }
+
+  const goToChat = (id: number | undefined): void => {
+    router.get(id !== undefined ? `/dashboard/${id}` : '/dashboard/', {}, {
       preserveState: true,
       replace: true,
       onError: (error) => {
         console.log(error)
       }
     })
-    if (isMobile) {
-      setOpenChatList(false)
-    }
   }
 
   const toggleChatList: () => void = () => {
@@ -138,7 +154,7 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
                   textAlign: 'center'
                 }}
               >
-                {auth?.user?.name}
+                {room?.name}
               </Typography>
             </Box>
           </Box>
@@ -163,7 +179,7 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
             </Box>
             <Box sx={{ width: openChatList || !isMobile ? '75%' : '100%', display: openChatList && isMobile ? 'none' : 'block' }}>
               {selectedChat !== null
-                ? <ChatContent messages={messages} />
+                ? <ChatContent messages={messages} room={room} />
                 : <Typography align='center' padding={2}>Select a Chat</Typography>}
             </Box>
           </Box>
