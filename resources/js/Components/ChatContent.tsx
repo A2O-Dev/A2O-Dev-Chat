@@ -1,15 +1,15 @@
-
 import { Box, Snackbar, TextField, Typography } from '@mui/material'
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { router, usePage } from '@inertiajs/react'
 import moment from 'moment'
+import { Message, Room } from '../interfaces/app'
 
 interface ErrorProps {
   [key: string]: string | undefined
 }
 interface Props {
-  messages: any[]
-  room: object
+  messages: Message[]
+  room: Room
 }
 
 const ChatContent: FC<Props> = ({ messages, room }) => {
@@ -17,6 +17,9 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
   const [open, setOpen] = useState(false)
   const user = usePage().props.auth.user
   const { errors } = usePage().props as { errors: ErrorProps }
+
+  const messagesEndRef = useRef<HTMLDivElement | null>(null)
+
   const isObjectEmpty = (obj: Record<string, unknown> | null | undefined): boolean => {
     return (obj == null) || (typeof obj === 'object' && (Object.keys(obj).length === 0))
   }
@@ -26,6 +29,11 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
       setOpen(true)
     }
   }, [errors])
+
+  useEffect(() => {
+    (messagesEndRef.current as HTMLDivElement)?.scrollIntoView({ behavior: 'auto' })
+  }, [messages])
+
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string): void => {
     if (reason === 'clickaway') {
       return
@@ -33,7 +41,8 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
 
     setOpen(false)
   }
-  const verifyUser = (userId: string): boolean => {
+
+  const verifyUser = (userId: number): boolean => {
     return userId === user.id
   }
 
@@ -96,6 +105,7 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
             </Box>
           </Box>
         ))}
+        <div ref={messagesEndRef} />
       </Box>
       <Box sx={{ marginTop: 4, backgroundColor: '#EEEEEE', padding: 2, borderTop: '1px solid #CCC' }}>
         <Box component='form' onSubmit={handleSubmit} autoComplete='off' sx={{ mx: 2, mt: 3 }}>
@@ -112,7 +122,6 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
               '& .MuiOutlinedInput-root': {
                 backgroundColor: '#fff',
                 borderRadius: '10px'
-
               },
               '& .MuiInput-underline:hover:before': {
                 border: 'none !important'
