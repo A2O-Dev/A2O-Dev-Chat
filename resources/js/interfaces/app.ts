@@ -4,6 +4,7 @@ export interface Room {
   messages: Message[]
   name: string
   updated_at: string
+  notifications: number | undefined
 }
 
 export interface Message {
