@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoomController;
 use App\Models\Room;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
@@ -38,5 +39,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/message', [MessageController::class, 'sendMessage'])->middleware(['auth', 'verified']);
+Route::post('/verify_user', [RoomController::class, 'verifyUser'])->middleware(['auth', 'verified']);
 
 require __DIR__ . '/auth.php';
