@@ -19,7 +19,6 @@ class RoomController extends Controller
   public function verifyUser(VerifyUserRequest  $request)
   {
     $currentUser = Auth::user();
-    DB::beginTransaction();
 
     try {
       Log::debug('Verifying email', [
@@ -58,7 +57,6 @@ class RoomController extends Controller
       }
       return redirect()->route('dashboard', ['room' => $room->id]);
     } catch (Exception $e) {
-      DB::rollBack();
       Log::error('Error validating user', [
         'exception' => $e->getMessage(),
         'user_id' => auth()->user()->id ?? 'guest',

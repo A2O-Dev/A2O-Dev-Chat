@@ -6,6 +6,7 @@ use App\Http\Controllers\RoomController;
 use App\Models\Room;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,9 +21,20 @@ Route::get('/', function () {
 
 Route::get('/dashboard/{room?}', function (Room $room = null) {
     $user = Auth::user();
-    $rooms = $user->rooms()->with(['messages' => function ($query) {
-        $query->latest()->take(1);
-    }])->get();
+    $rooms = $user->rooms()->with([
+        'messages' => function ($query) {
+            $query->latest()->take(1);
+        },
+        'users'
+    ])->get()->map(function ($room) use ($user) {
+        if ($room->is_direct_message) {
+            $otherUser = $room->users->firstWhere('id', '!=', $user->id);
+            if ($otherUser) {
+                $room->name = $otherUser->name;
+            }
+        }
+        return $room;
+    });
 
     $data = [
         'rooms' => $rooms,
