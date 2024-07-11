@@ -22,10 +22,6 @@ const mockRoom: Room = {
   name: 'Room1',
   updated_at: date,
   created_at: date,
-  messages: [
-    { id: 1, message: 'Hello', user_id: 1, room_id: 1, updated_at: date, user: { id: 1, name: 'User1', created_at: date, updated_at: date, email: 'email@email.com', email_verified_at: date }, created_at: new Date().toString() },
-    { id: 2, message: 'Hi', room_id: 1, user_id: 2, updated_at: date, user: { id: 2, name: 'User2', created_at: date, updated_at: date, email: 'email@email.com', email_verified_at: date }, created_at: new Date().toString() }
-  ],
   notifications: 2
 }
 const mockUsePage = usePage as jest.Mock
@@ -85,7 +81,6 @@ describe('ChatContent', () => {
     }, {
       preserveState: true,
       replace: true,
-      onError: expect.any(Function),
       onSuccess: expect.any(Function)
     })
   })
@@ -99,7 +94,7 @@ describe('ChatContent', () => {
       rememberedState: {},
       props: {
         auth: { user: { id: 1, name: 'User1' } },
-        errors: { error: 'Error message' }
+        errors: { message: 'Error message' }
       }
     })
 

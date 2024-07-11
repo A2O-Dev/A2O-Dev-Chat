@@ -20,7 +20,6 @@ export interface Message {
 export interface Room {
   created_at: string
   id: number
-  messages: Message[]
   name: string
   updated_at: string
   notifications: number | undefined
