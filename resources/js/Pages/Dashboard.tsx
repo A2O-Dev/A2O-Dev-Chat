@@ -9,11 +9,14 @@ import SearchIcon from '@mui/icons-material/Search'
 import Modal from '@mui/material/Modal'
 import { router, usePage } from '@inertiajs/react'
 import echo from '../services/echo'
+import PrimaryButton from '@/Components/PrimaryButton'
+import { Room } from '@/interfaces/app'
 
 const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
   const [open, setOpen] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>('')
   const [openChatList, setOpenChatList] = useState<boolean>(false)
-  const [selectedChat, setSelectedChat] = useState<number | null>(room)
+  const [selectedChat, setSelectedChat] = useState<number | null>(room.id)
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
   const user = usePage().props.auth.user
 
@@ -42,8 +45,9 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
   }
 
   const goToChat = (id: number | undefined): void => {
+    console.log(id)
     router.get(id !== undefined ? `/dashboard/${id}` : '/dashboard/', {}, {
-      preserveState: true,
+      preserveState: false,
       replace: true,
       onError: (error) => {
         console.log(error)
@@ -53,6 +57,20 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
 
   const toggleChatList: () => void = () => {
     setOpenChatList(prevOpen => !prevOpen)
+  }
+
+  const handleSubmit = () => {
+    router.post('/verify_user', { email: email }, {
+      preserveState: true,
+      replace: true,
+      onError: (error) => {
+        console.log(error)
+      },
+      onSuccess: (res) => {
+        setSelectedChat(res.props.room.id)
+        setOpen(false)
+      }
+    })
   }
 
   return (
@@ -87,8 +105,8 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
               >
                 New Message
               </Typography>
-              <TextField label='Email' variant='outlined' type='email' fullWidth />
-              <Button variant='outlined'>Validate Email</Button>
+              <TextField label='Email' variant='outlined' type='email' value={email} onChange={(e) => setEmail(e.target.value) } fullWidth />
+              <Button variant='outlined' onClick={handleSubmit}>Validate Email</Button>
             </Box>
           </Modal>
       }
@@ -154,7 +172,7 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
                   textAlign: 'center'
                 }}
               >
-                {room?.name}
+                {rooms?.find(r=> r.id === selectedChat)?.name}
               </Typography>
             </Box>
           </Box>

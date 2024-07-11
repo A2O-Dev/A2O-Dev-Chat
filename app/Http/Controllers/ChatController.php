@@ -31,7 +31,7 @@ class ChatController extends Controller
         $data = [
             'rooms' => $rooms,
             'messages' => $room ? $room->messages()->with('user')->get() : [],
-            'room' => $room ? $room->load('messages') : []
+            'room' => $room ?? []
         ];
 
         return Inertia::render('Dashboard', $data);
@@ -82,7 +82,7 @@ class ChatController extends Controller
         'user_id' => auth()->user()->id ?? 'guest',
         'request_ip' => request()->ip()
       ]);
-      return back()->withErrors(['error' => 'Message has not been sent']);
+      return back()->withErrors(['message' => 'Message has not been sent']);
     }
   }
 }

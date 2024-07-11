@@ -1,7 +1,7 @@
 import { List } from '@mui/material'
 import ChatItem from './ChatItem'
 import { FC } from 'react'
-import { Room } from '../interfaces/app'
+import { Room, User } from '../interfaces/app'
 
 interface ChatListProps {
   selected: number | null

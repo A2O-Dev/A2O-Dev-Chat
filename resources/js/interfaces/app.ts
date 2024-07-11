@@ -3,6 +3,7 @@ export interface Room {
   id: number
   messages: Message[]
   name: string
+  is_direct_message: boolean
   updated_at: string
   notifications: number | undefined
 }
