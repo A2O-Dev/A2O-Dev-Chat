@@ -22,10 +22,26 @@ export interface Room {
   id: number
   name: string
   is_direct_message: boolean
+  pivot?: {
+    user_id: number
+    room_id: number
+  }
+  messages?: Message[]
   updated_at: string
-  notifications: number | undefined
+  notifications?: number | undefined
 }
 
 export interface Auth {
   user: User
+}
+
+export interface ErrorProps {
+  [key: string]: string | undefined
+}
+
+export interface DashboardProps {
+  auth: Auth
+  rooms: Room[]
+  room?: Room
+  messages: Message[]
 }

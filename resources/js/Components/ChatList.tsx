@@ -4,7 +4,7 @@ import { FC } from 'react'
 import { Room } from '../interfaces/app'
 
 interface ChatListProps {
-  selected: number | null
+  selected: number | undefined
   onSelectChat: (id: number) => void
   rooms: Room[]
 }

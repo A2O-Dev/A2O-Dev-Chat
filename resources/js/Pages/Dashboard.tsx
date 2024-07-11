@@ -1,38 +1,39 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { PageProps } from '@/types'
 import { FC, useEffect, useState } from 'react'
-import { Alert, Box, Button, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from '@mui/material'
+import { Box, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from '@mui/material'
 import ChatList from '@/Components/ChatList'
 import ChatContent from '@/Components/ChatContent'
 import { AddCircle, Menu } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
-import Modal from '@mui/material/Modal'
 import { router, usePage } from '@inertiajs/react'
 import echo from '../services/echo'
 import { isObjectEmpty } from '@/utils/isObjectEmpty'
+import { DashboardProps, ErrorProps, Room } from '@/interfaces/app'
+import { Theme } from '@mui/material/styles'
+import UserValidation from '@/Components/UserValidation'
 
-const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
+const Dashboard: FC<DashboardProps> = ({ auth, rooms, room, messages }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openError, setOpenError] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
   const [openChatList, setOpenChatList] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | undefined>(room?.id)
-  const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
-  const user = usePage().props.auth.user
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+  const user = auth.user
   const { errors } = usePage().props as { errors: ErrorProps }
 
   useEffect(() => {
     echo.channel('chat')
       .listen('MessageSent', (e: any) => {
-        const isUserInRooms = rooms.some(r => r.pivot.room_id === e.message.room_id)
-        if (e.message.user_id !== user.id && isUserInRooms !== false) {
-          goToChat(room.id)
+        const isUserInRooms = rooms.some((r: Room) => r.pivot?.room_id === e.message.room_id)
+        if (e.message.user_id !== user.id && isUserInRooms) {
+          goToChat(room?.id)
         }
       })
   }, [room, rooms])
 
   useEffect(() => {
-    if (!isObjectEmpty(errors) && errors?.email !== null) {
+    if (!isObjectEmpty(errors) && errors?.email !== undefined) {
       setOpenError(true)
     }
   }, [errors])
@@ -80,7 +81,10 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
         console.log(error.email)
       },
       onSuccess: (res) => {
-        setSelectedChat(res.props.room.id)
+        const responseProps = res.props as { room?: { id: number } }
+        if (responseProps.room?.id !== undefined) {
+          setSelectedChat(responseProps.room.id)
+        }
         setEmail('')
         setOpen(false)
       }
@@ -89,58 +93,16 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
 
   return (
     <>
-      {
-        open &&
-          <Modal
-            open={open}
-            onClose={handleCloseModal}
-          >
-            <Box sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              borderRadius: '10px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'end',
-              gap: 2,
-              width: 400,
-              bgcolor: 'background.paper',
-              border: '2px solid #ccc',
-              boxShadow: 24,
-              p: 4
-            }}
-            >
-              <Typography
-                sx={{
-                  fontWeight: 'fontWeightBold'
-                }}
-              >
-                New Message
-              </Typography>
-              <form
-                autoComplete='off'
-                data-testid='email-validate-form'
-              >
-                <TextField label='Email' variant='outlined' type='email' value={email} onChange={(e) => setEmail(e.target.value)} fullWidth />
-                <Button variant='outlined' onClick={handleSubmit}>Validate Email</Button>
-
-              </form>
-              {
-                openError &&
-                  <Alert
-                    onClose={() => setOpenError(false)}
-                    severity='error'
-                    variant='filled'
-                    sx={{ width: '100%' }}
-                  >
-                    {errors?.email}
-                  </Alert>
-              }
-            </Box>
-          </Modal>
-      }
+      <UserValidation
+        open={open}
+        onClose={handleCloseModal}
+        email={email}
+        setEmail={setEmail}
+        handleSubmit={handleSubmit}
+        openError={openError}
+        setOpenError={setOpenError}
+        errors={errors}
+      />
       <AuthenticatedLayout
         user={auth.user}
       >
