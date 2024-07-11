@@ -1,8 +1,8 @@
-import { Box, Snackbar, TextField, Typography } from '@mui/material'
+import { Box, Alert, TextField, Typography } from '@mui/material'
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { router, usePage } from '@inertiajs/react'
 import moment from 'moment'
-import { Message, Room } from '../interfaces/app'
+import { Auth, Message, Room } from '../interfaces/app'
 
 interface ErrorProps {
   [key: string]: string | undefined
@@ -15,7 +15,7 @@ interface Props {
 const ChatContent: FC<Props> = ({ messages, room }) => {
   const [message, setMessage] = useState('')
   const [open, setOpen] = useState(false)
-  const user = usePage().props.auth.user
+  const { user } = usePage().props.auth as Auth
   const { errors } = usePage().props as { errors: ErrorProps }
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
@@ -31,7 +31,7 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
   }, [errors])
 
   useEffect(() => {
-    (messagesEndRef.current as HTMLDivElement)?.scrollIntoView({ behavior: 'auto' })
+    (messagesEndRef?.current as HTMLDivElement)?.scrollIntoView({ behavior: 'auto' })
   }, [messages])
 
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string): void => {
@@ -46,22 +46,19 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
     return userId === user.id
   }
 
-  const handleSubmit = (e): void => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
 
     router.post('/message', { message, room_id: room.id, user_id: user.id }, {
       preserveState: true,
       replace: true,
-      onError: (error) => {
-        console.log(error)
-      },
       onSuccess: () => {
         setMessage('')
       }
     })
   }
 
-  const onchangeMessage = useCallback((e) => {
+  const onchangeMessage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value)
   }, [])
 
@@ -96,7 +93,7 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
                   {message.user.name}
                 </Typography>
                 <Typography variant='body2' sx={{ color: (verifyUser(message.user_id) ? '#EEE' : 'black'), ml: 2 }}>
-                  {moment(message.created_at).calendar()}
+                  {moment(message.created_at, moment.ISO_8601).calendar()}
                 </Typography>
               </Box>
               <Typography variant='body1'>
@@ -108,7 +105,12 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
         <div ref={messagesEndRef} />
       </Box>
       <Box sx={{ marginTop: 4, backgroundColor: '#EEEEEE', padding: 2, borderTop: '1px solid #CCC' }}>
-        <Box component='form' onSubmit={handleSubmit} autoComplete='off' sx={{ mx: 2, mt: 3 }}>
+        <form
+          onSubmit={handleSubmit}
+          autoComplete='off'
+          data-testid='chat-form'
+        >
+
           <TextField
             type='text'
             fullWidth
@@ -129,14 +131,18 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
               backgroundColor: '#fff'
             }}
           />
-        </Box>
+        </form>
       </Box>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message={errors.error}
-      />
+      {open && (
+        <Alert
+          onClose={handleClose}
+          severity='error'
+          variant='filled'
+          sx={{ width: '100%' }}
+        >
+          {errors?.message}
+        </Alert>
+      )}
     </Box>
   )
 }

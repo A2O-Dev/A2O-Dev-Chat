@@ -16,18 +16,19 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
   const [openChatList, setOpenChatList] = useState<boolean>(false)
-  const [selectedChat, setSelectedChat] = useState<number | null>(room.id)
+  const [selectedChat, setSelectedChat] = useState<number | undefined>(room?.id)
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
   const user = usePage().props.auth.user
 
   useEffect(() => {
     echo.channel('chat')
       .listen('MessageSent', (e: any) => {
-        if (e.message.user_id !== user.id) {
-          goToChat(room?.id)
+        const isUserInRooms = rooms.some(r => r.pivot.room_id === e.message.room_id)
+        if (e.message.user_id !== user.id && isUserInRooms !== false) {
+          goToChat(room.id)
         }
       })
-  }, [])
+  }, [room, rooms])
 
   useEffect(() => {
     if (!isMobile) {
@@ -196,7 +197,7 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
 
             </Box>
             <Box sx={{ width: openChatList || !isMobile ? '75%' : '100%', display: openChatList && isMobile ? 'none' : 'block' }}>
-              {selectedChat !== null
+              {(selectedChat !== null && selectedChat !== undefined)
                 ? <ChatContent messages={messages} room={room} />
                 : <Typography align='center' padding={2}>Select a Chat</Typography>}
             </Box>
