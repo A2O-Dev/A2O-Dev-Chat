@@ -7,22 +7,49 @@ import ChatContent from '@/Components/ChatContent'
 import { AddCircle, Menu } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import Modal from '@mui/material/Modal'
+import { router, usePage } from '@inertiajs/react'
+import echo from '../services/echo'
 
-const Dashboard: FC<PageProps> = ({ auth }) => {
+const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openChatList, setOpenChatList] = useState<boolean>(false)
-  const [selectedChat, setSelectedChat] = useState<number | null>(null)
+  const [selectedChat, setSelectedChat] = useState<number | undefined>(room?.id)
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
+  const user = usePage().props.auth.user
+
+  useEffect(() => {
+    echo.channel('chat')
+      .listen('MessageSent', (e: any) => {
+        const isUserInRooms = rooms.some(r => r.pivot.room_id === e.message.room_id)
+        if (e.message.user_id !== user.id && isUserInRooms !== false) {
+          goToChat(room.id)
+        }
+      })
+  }, [room, rooms])
+
   useEffect(() => {
     if (!isMobile) {
       setOpenChatList(false)
     }
   }, [isMobile])
+
   const handleSelectChat = (id: number): void => {
     setSelectedChat(id)
+    goToChat(id)
+
     if (isMobile) {
       setOpenChatList(false)
     }
+  }
+
+  const goToChat = (id: number | undefined): void => {
+    router.get(id !== undefined ? `/dashboard/${id}` : '/dashboard/', {}, {
+      preserveState: true,
+      replace: true,
+      onError: (error) => {
+        console.log(error)
+      }
+    })
   }
 
   const toggleChatList: () => void = () => {
@@ -128,7 +155,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
                   textAlign: 'center'
                 }}
               >
-                {auth?.user?.name}
+                {room?.name}
               </Typography>
             </Box>
           </Box>
@@ -144,7 +171,7 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
               overflowY: 'auto'
             }}
             >
-              <ChatList selected={selectedChat} onSelectChat={handleSelectChat} />
+              <ChatList rooms={rooms} selected={selectedChat} onSelectChat={handleSelectChat} />
 
               <IconButton onClick={() => setOpen(true)} sx={{ position: 'absolute', left: 10, bottom: 10 }}>
                 <AddCircle sx={{ color: '#fff', width: '60px', height: '60px' }} />
@@ -152,8 +179,8 @@ const Dashboard: FC<PageProps> = ({ auth }) => {
 
             </Box>
             <Box sx={{ width: openChatList || !isMobile ? '75%' : '100%', display: openChatList && isMobile ? 'none' : 'block' }}>
-              {selectedChat !== null
-                ? <ChatContent chatId={selectedChat} />
+              {(selectedChat !== null && selectedChat !== undefined)
+                ? <ChatContent messages={messages} room={room} />
                 : <Typography align='center' padding={2}>Select a Chat</Typography>}
             </Box>
           </Box>

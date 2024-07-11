@@ -1,9 +1,18 @@
 {
-    "extends": ["./node_modules/ts-standard/eslintrc.json", "eslint:recommended"],
+    "extends": [
+        "./node_modules/ts-standard/eslintrc.json",
+        "plugin:testing-library/react",
+        "plugin:jest-dom/recommended"
+    ],
+
     "parserOptions": {
         "project": ["tsconfig.json"]
     },
     "rules": {
         "react-hooks/exhaustive-deps": "off"
-    }
+    },
+    "ignorePatterns": [
+        "jest.config.ts",
+        "jest.setup.ts"
+    ]
 }

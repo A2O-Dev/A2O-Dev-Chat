@@ -1,22 +1,19 @@
 import { List } from '@mui/material'
 import ChatItem from './ChatItem'
 import { FC } from 'react'
-
-const chats = [
-  { id: 1, name: 'Room 1', lastMessage: 'Hey! We are ready...', time: '20m', notifications: 1 },
-  { id: 2, name: 'Room 2', lastMessage: 'I prepared some var...', time: '1h', notifications: 2 }
-]
+import { Room } from '../interfaces/app'
 
 interface ChatListProps {
   selected: number | null
   onSelectChat: (id: number) => void
+  rooms: Room[]
 }
 
-const ChatList: FC<ChatListProps> = ({ selected, onSelectChat }) => {
+const ChatList: FC<ChatListProps> = ({ rooms, selected, onSelectChat }) => {
   return (
     <List>
-      {chats.map(chat => (
-        <ChatItem key={chat.id} chat={chat} onSelect={() => onSelectChat(chat.id)} isActive={selected === chat.id} />
+      {rooms.map(room => (
+        <ChatItem key={room.id} room={room} onSelect={() => onSelectChat(room.id)} isActive={selected === room.id} />
       ))}
     </List>
   )

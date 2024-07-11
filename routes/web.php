@@ -22,10 +22,11 @@ Route::get('/dashboard/{room?}', function (Room $room = null) {
     $rooms = $user->rooms()->with(['messages' => function ($query) {
         $query->latest()->take(1);
     }])->get();
+
     $data = [
         'rooms' => $rooms,
-        'messages' => $room->messages ?? [],
-        'room' => $room ? $room->load('messages') : []
+        'messages' => isset($room) ? $room->messages()->with('user')->get() : [],
+        'room' => $room ?? []
     ];
     return Inertia::render('Dashboard', $data);
 })->middleware(['auth', 'verified'])->name('dashboard');
