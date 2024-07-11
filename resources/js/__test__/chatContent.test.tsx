@@ -22,7 +22,8 @@ const mockRoom: Room = {
   name: 'Room1',
   updated_at: date,
   created_at: date,
-  notifications: 2
+  notifications: 2,
+  is_direct_message: false
 }
 const mockUsePage = usePage as jest.Mock
 

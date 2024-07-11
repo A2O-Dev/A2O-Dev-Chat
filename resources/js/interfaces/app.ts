@@ -4,7 +4,6 @@ export interface User {
   email_verified_at: string
   id: number
   name: string
-  is_direct_message: boolean
   updated_at: string
 }
 
@@ -22,6 +21,7 @@ export interface Room {
   created_at: string
   id: number
   name: string
+  is_direct_message: boolean
   updated_at: string
   notifications: number | undefined
 }

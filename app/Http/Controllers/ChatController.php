@@ -48,7 +48,7 @@ class ChatController extends Controller
         'user_id' => auth()->user()->id ?? 'guest',
         'request_ip' => request()->ip()
       ]);
-      return back()->withErrors(['error' => 'User not found or message has not been sent']);
+      return back()->withErrors(['email' => 'User not found']);
     }
   }
 

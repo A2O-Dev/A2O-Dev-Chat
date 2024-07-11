@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { ListItem, ListItemText, Badge, Typography } from '@mui/material'
-import { Room, User } from '../interfaces/app'
+import { Room } from '../interfaces/app'
 
 interface ChatItemProps {
   room: Room

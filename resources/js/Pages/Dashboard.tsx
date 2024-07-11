@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { PageProps } from '@/types'
 import { FC, useEffect, useState } from 'react'
-import { Box, Button, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from '@mui/material'
+import { Alert, Box, Button, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from '@mui/material'
 import ChatList from '@/Components/ChatList'
 import ChatContent from '@/Components/ChatContent'
 import { AddCircle, Menu } from '@mui/icons-material'
@@ -9,16 +9,17 @@ import SearchIcon from '@mui/icons-material/Search'
 import Modal from '@mui/material/Modal'
 import { router, usePage } from '@inertiajs/react'
 import echo from '../services/echo'
-import PrimaryButton from '@/Components/PrimaryButton'
-import { Room } from '@/interfaces/app'
+import { isObjectEmpty } from '@/utils/isObjectEmpty'
 
 const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
   const [open, setOpen] = useState<boolean>(false)
+  const [openError, setOpenError] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
   const [openChatList, setOpenChatList] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | undefined>(room?.id)
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'))
   const user = usePage().props.auth.user
+  const { errors } = usePage().props as { errors: ErrorProps }
 
   useEffect(() => {
     echo.channel('chat')
@@ -29,6 +30,12 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
         }
       })
   }, [room, rooms])
+
+  useEffect(() => {
+    if (!isObjectEmpty(errors) && errors?.email !== null) {
+      setOpenError(true)
+    }
+  }, [errors])
 
   useEffect(() => {
     if (!isMobile) {
@@ -46,9 +53,8 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
   }
 
   const goToChat = (id: number | undefined): void => {
-    console.log(id)
     router.get(id !== undefined ? `/dashboard/${id}` : '/dashboard/', {}, {
-      preserveState: false,
+      preserveState: true,
       replace: true,
       onError: (error) => {
         console.log(error)
@@ -60,15 +66,22 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
     setOpenChatList(prevOpen => !prevOpen)
   }
 
-  const handleSubmit = () => {
-    router.post('/verify_user', { email: email }, {
+  const handleCloseModal: () => void = () => {
+    setOpen(false)
+    setEmail('')
+    setOpenError(false)
+  }
+
+  const handleSubmit: () => void = () => {
+    router.post('/verify_user', { email }, {
       preserveState: true,
       replace: true,
       onError: (error) => {
-        console.log(error)
+        console.log(error.email)
       },
       onSuccess: (res) => {
         setSelectedChat(res.props.room.id)
+        setEmail('')
         setOpen(false)
       }
     })
@@ -80,7 +93,7 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
         open &&
           <Modal
             open={open}
-            onClose={() => setOpen(false)}
+            onClose={handleCloseModal}
           >
             <Box sx={{
               position: 'absolute',
@@ -106,8 +119,25 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
               >
                 New Message
               </Typography>
-              <TextField label='Email' variant='outlined' type='email' value={email} onChange={(e) => setEmail(e.target.value) } fullWidth />
-              <Button variant='outlined' onClick={handleSubmit}>Validate Email</Button>
+              <form
+                autoComplete='off'
+                data-testid='email-validate-form'
+              >
+                <TextField label='Email' variant='outlined' type='email' value={email} onChange={(e) => setEmail(e.target.value)} fullWidth />
+                <Button variant='outlined' onClick={handleSubmit}>Validate Email</Button>
+
+              </form>
+              {
+                openError &&
+                  <Alert
+                    onClose={() => setOpenError(false)}
+                    severity='error'
+                    variant='filled'
+                    sx={{ width: '100%' }}
+                  >
+                    {errors?.email}
+                  </Alert>
+              }
             </Box>
           </Modal>
       }
@@ -173,7 +203,7 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
                   textAlign: 'center'
                 }}
               >
-                {rooms?.find(r=> r.id === selectedChat)?.name}
+                {rooms?.find(r => r.id === selectedChat)?.name}
               </Typography>
             </Box>
           </Box>

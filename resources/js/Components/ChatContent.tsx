@@ -3,6 +3,7 @@ import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { router, usePage } from '@inertiajs/react'
 import moment from 'moment'
 import { Auth, Message, Room } from '../interfaces/app'
+import { isObjectEmpty } from '@/utils/isObjectEmpty'
 
 interface ErrorProps {
   [key: string]: string | undefined
@@ -20,12 +21,8 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
 
-  const isObjectEmpty = (obj: Record<string, unknown> | null | undefined): boolean => {
-    return (obj == null) || (typeof obj === 'object' && (Object.keys(obj).length === 0))
-  }
-
   useEffect(() => {
-    if (!isObjectEmpty(errors)) {
+    if (!isObjectEmpty(errors) && errors?.message !== null) {
       setOpen(true)
     }
   }, [errors])
