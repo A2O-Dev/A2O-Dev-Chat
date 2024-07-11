@@ -26,7 +26,7 @@ Route::get('/dashboard/{room?}', function (Room $room = null) {
     $data = [
         'rooms' => $rooms,
         'messages' => isset($room) ? $room->messages()->with('user')->get() : [],
-        'room' => $room ? $room->load('messages') : []
+        'room' => $room ?? []
     ];
     return Inertia::render('Dashboard', $data);
 })->middleware(['auth', 'verified'])->name('dashboard');

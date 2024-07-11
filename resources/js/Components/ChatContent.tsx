@@ -52,9 +52,6 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
     router.post('/message', { message, room_id: room.id, user_id: user.id }, {
       preserveState: true,
       replace: true,
-      onError: (error) => {
-        console.log(error)
-      },
       onSuccess: () => {
         setMessage('')
       }
@@ -143,7 +140,7 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
           variant='filled'
           sx={{ width: '100%' }}
         >
-          {errors?.error}
+          {errors?.message}
         </Alert>
       )}
     </Box>
