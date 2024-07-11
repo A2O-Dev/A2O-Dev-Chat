@@ -45,7 +45,7 @@ const Dashboard: FC<PageProps> = ({ auth, rooms, room, messages }) => {
   const goToChat = (id: number | undefined): void => {
     router.get(id !== undefined ? `/dashboard/${id}` : '/dashboard/', {}, {
       preserveState: true,
-      replace: false,
+      replace: true,
       onError: (error) => {
         console.log(error)
       }
