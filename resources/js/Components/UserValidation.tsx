@@ -34,7 +34,7 @@ const UserValidation: FC<UserValidationProps> = ({ open, onClose, email, setEmai
       }}
       >
         <Typography sx={{ fontWeight: 'fontWeightBold', textAlign: 'center' }}>
-          New Message
+          NEW MESSAGE
         </Typography>
         <TextField
           label='Email'
