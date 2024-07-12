@@ -165,7 +165,7 @@ const Dashboard: FC<DashboardProps> = ({ auth, rooms, room, messages }) => {
                   textAlign: 'center'
                 }}
               >
-                {rooms?.find(r => r.id === selectedChat)?.name}
+                {rooms?.find(r => r.id === selectedChat)?.name ?? 'New Message'}
               </Typography>
             </Box>
           </Box>

@@ -54,7 +54,7 @@ class ChatService
    */
   public function getUserRooms($user)
   {
-    return $user->rooms()->with([
+    return $user->rooms()->whereHas('messages')->with([
       'messages' => function ($query) {
         $query->latest()->take(1);
       },
