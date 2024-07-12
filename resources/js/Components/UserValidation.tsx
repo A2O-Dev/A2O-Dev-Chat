@@ -24,7 +24,7 @@ const UserValidation: FC<UserValidationProps> = ({ open, onClose, email, setEmai
         borderRadius: '10px',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'end',
+        alignItems: 'center',
         gap: 2,
         width: 400,
         bgcolor: 'background.paper',
@@ -33,22 +33,32 @@ const UserValidation: FC<UserValidationProps> = ({ open, onClose, email, setEmai
         p: 4
       }}
       >
-        <Typography sx={{ fontWeight: 'fontWeightBold' }}>
+        <Typography sx={{ fontWeight: 'fontWeightBold', textAlign: 'center' }}>
           New Message
         </Typography>
-        <form autoComplete='off' data-testid='email-validate-form'>
-          <TextField
-            label='Email'
-            variant='outlined'
-            type='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-          />
-          <Button variant='outlined' onClick={handleSubmit}>
-            Validate Email
-          </Button>
-        </form>
+        <TextField
+          label='Email'
+          variant='outlined'
+          type='email'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          fullWidth
+        />
+        <Button
+          variant='outlined'
+          onClick={handleSubmit}
+          sx={{
+            bgcolor: '#0049A8',
+            color: '#fff',
+            alignSelf: 'flex-end',
+            '&:hover': {
+              bgcolor: '#055ccf',
+              color: '#fff'
+            }
+          }}
+        >
+          Validate Email
+        </Button>
         {openError && (
           <Alert
             onClose={() => setOpenError(false)}
