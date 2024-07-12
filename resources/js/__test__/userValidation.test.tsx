@@ -16,7 +16,7 @@ describe('UserValidation Component', () => {
   test('renders the modal with open state', () => {
     render(<UserValidation {...defaultProps} />)
 
-    expect(screen.getByText('New Message')).toBeInTheDocument()
+    expect(screen.getByText('NEW MESSAGE')).toBeInTheDocument()
     expect(screen.getByLabelText('Email')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Validate Email/i })).toBeInTheDocument()
   })
