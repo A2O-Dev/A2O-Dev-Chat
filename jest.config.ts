@@ -11,7 +11,7 @@ const config: Config = {
         '^.+\\.(js|jsx)$': 'babel-jest',
     },
     moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/resources/js/__test__/$1'
+        '^@/(.*)$': '<rootDir>/resources/js/$1'
     }
 }
 

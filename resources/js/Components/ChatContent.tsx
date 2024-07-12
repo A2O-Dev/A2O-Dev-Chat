@@ -2,14 +2,12 @@ import { Box, Alert, TextField, Typography } from '@mui/material'
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { router, usePage } from '@inertiajs/react'
 import moment from 'moment'
-import { Auth, Message, Room } from '../interfaces/app'
+import { Auth, ErrorProps, Message, Room } from '../interfaces/app'
+import { isObjectEmpty } from '@/utils/isObjectEmpty'
 
-interface ErrorProps {
-  [key: string]: string | undefined
-}
 interface Props {
   messages: Message[]
-  room: Room
+  room?: Room
 }
 
 const ChatContent: FC<Props> = ({ messages, room }) => {
@@ -20,12 +18,8 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
 
-  const isObjectEmpty = (obj: Record<string, unknown> | null | undefined): boolean => {
-    return (obj == null) || (typeof obj === 'object' && (Object.keys(obj).length === 0))
-  }
-
   useEffect(() => {
-    if (!isObjectEmpty(errors)) {
+    if (!isObjectEmpty(errors) && errors?.message !== undefined) {
       setOpen(true)
     }
   }, [errors])
@@ -49,7 +43,7 @@ const ChatContent: FC<Props> = ({ messages, room }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
 
-    router.post('/message', { message, room_id: room.id, user_id: user.id }, {
+    router.post('/message', { message, room_id: room?.id, user_id: user.id }, {
       preserveState: true,
       replace: true,
       onSuccess: () => {
