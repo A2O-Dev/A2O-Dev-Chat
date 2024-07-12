@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Log;
 
 class ChatService
 {
+  /**
+   * Verify the user's email and return the corresponding chat room.
+   *
+   * @param string
+   * @return Room
+   */
   public function verifyUser(string $email): Room
   {
     $currentUser = Auth::user();
@@ -40,21 +46,27 @@ class ChatService
     return $room;
   }
 
+  /**
+   * Get the rooms associated with the given user.
+   *
+   * @param User $user
+   * @return \Illuminate\Support\Collection
+   */
   public function getUserRooms($user)
-    {
-        return $user->rooms()->with([
-            'messages' => function ($query) {
-                $query->latest()->take(1);
-            },
-            'users'
-        ])->get()->map(function ($room) use ($user) {
-            if ($room->is_direct_message) {
-                $otherUser = $room->users->firstWhere('id', '!=', $user->id);
-                if ($otherUser) {
-                    $room->name = $otherUser->name;
-                }
-            }
-            return $room;
-        });
-    }
+  {
+    return $user->rooms()->with([
+      'messages' => function ($query) {
+        $query->latest()->take(1);
+      },
+      'users'
+    ])->get()->map(function ($room) use ($user) {
+      if ($room->is_direct_message) {
+        $otherUser = $room->users->firstWhere('id', '!=', $user->id);
+        if ($otherUser) {
+          $room->name = $otherUser->name;
+        }
+      }
+      return $room;
+    });
+  }
 }

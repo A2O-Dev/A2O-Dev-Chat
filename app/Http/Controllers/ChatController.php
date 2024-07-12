@@ -16,27 +16,49 @@ use Inertia\Inertia;
 
 class ChatController extends Controller
 {
+  /**
+   * The chat service instance.
+   *
+   * @var ChatService
+   */
   protected $chatService;
 
+  /**
+   * ChatController constructor.
+   *
+   * @param ChatService $chatService
+   */
   public function __construct(ChatService $chatService)
   {
     $this->chatService = $chatService;
   }
 
+  /**
+   * Display the chat dashboard.
+   *
+   * @param Room|null $room The room to display messages for.
+   * @return \Inertia\Response
+   */
   public function index(Room $room = null)
-    {
-        $user = Auth::user();
-        $rooms = $this->chatService->getUserRooms($user);
+  {
+    $user = Auth::user();
+    $rooms = $this->chatService->getUserRooms($user);
 
-        $data = [
-            'rooms' => $rooms,
-            'messages' => $room ? $room->messages()->with('user')->get() : [],
-            'room' => $room ?? []
-        ];
+    $data = [
+      'rooms' => $rooms,
+      'messages' => $room ? $room->messages()->with('user')->get() : [],
+      'room' => $room ?? []
+    ];
 
-        return Inertia::render('Dashboard', $data);
-    }
+    return Inertia::render('Dashboard', $data);
+  }
 
+  /**
+   * Verify a user's email address and redirect to the corresponding chat room.
+   *
+   * @param VerifyUserRequest $request
+   * @return \Illuminate\Http\RedirectResponse
+   */
   public function verifyUser(VerifyUserRequest $request)
   {
     try {
@@ -52,6 +74,12 @@ class ChatController extends Controller
     }
   }
 
+  /**
+   * Send a message to a chat room.
+   *
+   * @param SendMessageRequest $request
+   * @return \Illuminate\Http\RedirectResponse
+   */
   public function sendMessage(SendMessageRequest $request)
   {
     DB::beginTransaction();
