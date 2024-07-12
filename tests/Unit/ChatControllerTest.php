@@ -7,11 +7,48 @@ use App\Models\Room;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 
-class MessageControllerTest extends TestCase
+class ChatControllerTest extends TestCase
 {
   use RefreshDatabase;
+
+  /** @test */
+  public function it_verifies_a_user_and_redirects_to_dashboard()
+  {
+    // Given
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+    Auth::login($user);
+
+    $room = new Room();
+    $room->name = 'direct';
+    $room->is_direct_message = true;
+    $room->save();
+    $room->users()->attach([$user->id, $otherUser->id]);
+
+    // When
+    $response = $this->post('/verify_user', ['email' => $otherUser->email]);
+
+    // Then
+    $response->assertRedirect(route('dashboard', ['room' => $room->id]));
+  }
+
+  /** @test */
+  public function it_shows_error_if_user_verification_fails()
+  {
+    // Given
+    $user = User::factory()->create();
+    Auth::login($user);
+
+    // When
+    $response = $this->post('/verify_user', ['email' => 'nonexistent@example.com']);
+
+    // Then
+    $response->assertSessionHasErrors('email');
+    $response->assertRedirect(url()->previous());
+  }
 
   public function test_send_message_success()
   {
