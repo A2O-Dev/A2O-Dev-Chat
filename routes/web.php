@@ -7,6 +7,26 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+
+Route::get('/search', function (Request $request) {
+    $query = $request->input('query');
+
+    $messages = Room::whereHas('messages', function ($q) use ($query) {
+        $q->where('message', 'like', '%' . $query . '%');
+    })->with(['messages' => function ($q) use ($query) {
+        $q->where('message', 'like', '%' . $query . '%');
+    }])->get();
+
+    $users = Room::whereHas('users', function($q) use ($query) {
+        $q->where('name', 'like', '%' . $query . '%');
+    })->with(['messages' => function ($q) use ($query) {
+        $q->latest()->take(1);
+    }])->get();
+
+    $results = $messages->merge($users)->unique('id');
+    return response()->json(['query' => $results]);
+});
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -38,5 +58,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/message', [MessageController::class, 'sendMessage'])->middleware(['auth', 'verified']);
+
 
 require __DIR__ . '/auth.php';
