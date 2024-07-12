@@ -12,21 +12,28 @@ use Illuminate\Http\Request;
 Route::get('/search', function (Request $request) {
     $query = $request->input('query');
 
+    // Buscar en mensajes y traer usuarios asociados
     $messages = Room::whereHas('messages', function ($q) use ($query) {
         $q->where('message', 'like', '%' . $query . '%');
     })->with(['messages' => function ($q) use ($query) {
-        $q->where('message', 'like', '%' . $query . '%');
-    }])->get();
+        $q->where('message', 'like', '%' . $query . '%')->with('user')->get();
+    }, 'messages.user']) // Traer usuarios asociados a los mensajes
+    ->get();
 
+    // Buscar en usuarios y traer el mensaje más reciente
     $users = Room::whereHas('users', function($q) use ($query) {
         $q->where('name', 'like', '%' . $query . '%');
     })->with(['messages' => function ($q) use ($query) {
-        $q->latest()->take(1);
-    }])->get();
+        $q->latest()->take(1)->with('user')->get();
+    }]) // Traer usuarios asociados
+    ->get();
 
+    // Unificar resultados sin duplicados
     $results = $messages->merge($users)->unique('id');
+
     return response()->json(['query' => $results]);
 });
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
