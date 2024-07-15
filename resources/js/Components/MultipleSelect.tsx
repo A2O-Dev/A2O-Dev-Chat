@@ -20,7 +20,8 @@ const MenuProps = {
 
 
 interface MultipleSelectProps {
-    list: {id: number, value: string}[]
+    list: {id: number, value: string}[],
+    label: string
 }
 
 function getStyles(name: string, personName: string[], theme: Theme) {
@@ -32,7 +33,7 @@ function getStyles(name: string, personName: string[], theme: Theme) {
   };
 }
 
-function MultipleSelect({ list }: MultipleSelectProps) {
+function MultipleSelect({ list, label }: MultipleSelectProps) {
   const theme = useTheme();
   const [personName, setPersonName] = useState<string[]>([]);
 
@@ -48,7 +49,7 @@ function MultipleSelect({ list }: MultipleSelectProps) {
   return (
     <Box sx={{ width: '100%' }}>
       <FormControl sx={{ width: '100%' }}>
-        <InputLabel id="demo-multiple-name-label">Name</InputLabel>
+        <InputLabel id="demo-multiple-name-label">{label}</InputLabel>
         <Select
           labelId="demo-multiple-name-label"
           id="demo-multiple-name"
