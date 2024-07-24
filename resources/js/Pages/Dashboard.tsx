@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { FC, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { Box, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from '@mui/material'
 import ChatList from '@/Components/ChatList'
 import ChatContent from '@/Components/ChatContent'
@@ -90,16 +90,8 @@ const Dashboard: FC<DashboardProps> = ({ auth, rooms, room, messages }) => {
       }
     })
   }
-  const handleSubmitSearch = (e) => {
-    console.log(e.target.value)
+  const handleSubmitSearch = (e: ChangeEvent<HTMLInputElement>): void => {
     goToChat(room?.id, { search: e.target.value })
-    // router.get(room?.id !== undefined ? `/dashboard/${room?.id}` : '/dashboard/', {}, {
-    //   preserveState: true,
-    //   replace: true,
-    //   onError: (error) => {
-    //     console.log(error)
-    //   }
-    // })
   }
   return (
     <>

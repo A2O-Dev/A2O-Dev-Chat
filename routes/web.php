@@ -10,23 +10,25 @@ use Illuminate\Http\Request;
 Route::get('/search', function (Request $request) {
     $query = $request->input('query');
 
-    $messages = Room::whereHas('messages', function ($q) use ($query) {
+    $messages = \App\Models\Room::whereHas('messages', function ($q) use ($query) {
         $q->where('message', 'like', '%' . $query . '%');
     })->with(['messages' => function ($q) use ($query) {
-        $q->where('message', 'like', '%' . $query . '%')->with('user')->get();
-    }, 'messages.user']) // Traer usuarios asociados a los mensajes
+        $q->where('message', 'like', '%' . $query . '%')->with('user', 'room')->get();
+    }, 'messages.user'])
     ->get();
 
-    $users = Room::whereHas('users', function($q) use ($query) {
-        $q->where('name', 'like', '%' . $query . '%');
-    })->with(['messages' => function ($q) use ($query) {
-        $q->latest()->take(1)->with('user')->get();
-    }])
-    ->get();
+    $rooms = \App\Models\Room::where('is_direct_message', 1)
+        ->whereHas('users', function($q) use ($query) {
+            $q->where('name', 'like', '%' . $query . '%');
+        })
+        ->with(['messages' => function ($q) {
+            $q->latest()->take(1)->with('user', 'room');
+        }])
+        ->get();
 
-    $results = $messages->merge($users)->unique('id');
+    //$results = $messages->merge($users)->unique('id');
 
-    return response()->json(['query' => $results]);
+    return response()->json(['query' => $rooms]);
 });
 
 

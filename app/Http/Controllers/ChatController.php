@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
@@ -39,19 +40,30 @@ class ChatController extends Controller
    * @param Room|null $room The room to display messages for.
    * @return \Inertia\Response
    */
-  public function index(Room $room = null)
-  {
-    $user = Auth::user();
-    $rooms = $this->chatService->getUserRooms($user);
+    public function index(Room $room = null, Request $request)
+    {
+        $searchedMessages = collect([]);
+        $searchedUsers = collect([]);
 
-    $data = [
-      'rooms' => $rooms,
-      'messages' => $room ? $room->messages()->with('user')->get() : [],
-      'room' => $room ?? []
-    ];
+        if ($request->has('search') && !empty($request->input('search'))) {
+            $query = $request->input('search');
+            $searchedMessages = collect($this->chatService->searchByMessages($query));
+            $searchedUsers = collect($this->chatService->searchByUser($query));
+        }
 
-    return Inertia::render('Dashboard', $data);
-  }
+        $user = Auth::user();
+        $rooms = $this->chatService->getUserRooms($user);
+
+        $results = $searchedMessages->merge($searchedUsers)->unique('id');
+
+        $data = [
+            'rooms' => $request->has('search') && !empty($request->input('search')) ? $results : $rooms,
+            'messages' => $room ? $room->messages()->with('user')->get() : [],
+            'room' => $room ?? []
+        ];
+
+        return Inertia::render('Dashboard', $data);
+    }
 
   /**
    * Verify a user's email address and redirect to the corresponding chat room.
