@@ -40,6 +40,7 @@ export interface ErrorProps {
 }
 
 export interface DashboardProps {
+  users: User[]
   auth: Auth
   rooms: Room[]
   room?: Room

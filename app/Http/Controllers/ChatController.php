@@ -7,6 +7,7 @@ use App\Http\Requests\SendMessageRequest;
 use App\Http\Requests\VerifyUserRequest;
 use App\Models\Message;
 use App\Models\Room;
+use App\Models\User;
 use App\Services\ChatService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -45,6 +46,7 @@ class ChatController extends Controller
     $rooms = $this->chatService->getUserRooms($user);
 
     $data = [
+      'users' => User::all(),
       'rooms' => $rooms,
       'messages' => $room ? $room->messages()->with('user')->get() : [],
       'room' => $room ?? []

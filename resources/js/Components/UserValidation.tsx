@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
 import { Alert, Box, Button, TextField, Typography, Modal } from '@mui/material'
-import { ErrorProps } from '@/interfaces/app'
+import { ErrorProps, User } from '@/interfaces/app'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import CustomTabPanel from './CustomTabPanel';
@@ -15,6 +15,7 @@ interface UserValidationProps {
   openError: boolean
   setOpenError: (value: boolean) => void
   errors: ErrorProps | undefined
+  users: User[]
 }
 
 function a11yProps(index: number) {
@@ -23,7 +24,7 @@ function a11yProps(index: number) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-const UserValidation: FC<UserValidationProps> = ({ open, onClose, email, setEmail, handleSubmit, openError, setOpenError, errors }) => {
+const UserValidation: FC<UserValidationProps> = ({ users, open, onClose, email, setEmail, handleSubmit, openError, setOpenError, errors }) => {
   const [tabValue, setTabValue] = useState(0)
   const [roomName, setRoomName] = useState('')
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -112,7 +113,7 @@ const UserValidation: FC<UserValidationProps> = ({ open, onClose, email, setEmai
           onChange={(e) => setRoomName(e.target.value)}
           fullWidth
         />
-        <MultipleSelect list={[{id:1, value: 'uno'}, {id:2, value: 'dos'}]} label='Users'/>
+        <MultipleSelect list={users} label='Users'/>
         <Button
           variant='outlined'
           onClick={handleSubmit}

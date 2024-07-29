@@ -12,7 +12,7 @@ import { DashboardProps, ErrorProps, Room } from '@/interfaces/app'
 import { Theme } from '@mui/material/styles'
 import UserValidation from '@/Components/UserValidation'
 
-const Dashboard: FC<DashboardProps> = ({ auth, rooms, room, messages }) => {
+const Dashboard: FC<DashboardProps> = ({users, auth, rooms, room, messages }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openError, setOpenError] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
@@ -94,6 +94,7 @@ const Dashboard: FC<DashboardProps> = ({ auth, rooms, room, messages }) => {
   return (
     <>
       <UserValidation
+        users={users}
         open={open}
         onClose={handleCloseModal}
         email={email}

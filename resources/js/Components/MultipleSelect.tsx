@@ -6,6 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useState } from 'react';
 import { Box } from '@mui/material';
+import { User } from '@/interfaces/app';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -20,7 +21,7 @@ const MenuProps = {
 
 
 interface MultipleSelectProps {
-    list: {id: number, value: string}[],
+    list: User[],
     label: string
 }
 
@@ -63,9 +64,9 @@ function MultipleSelect({ list, label }: MultipleSelectProps) {
             <MenuItem
               key={item.id}
               value={item.id}
-              style={getStyles(item.value, personName, theme)}
+              style={getStyles(item.email, personName, theme)}
             >
-              {item.value}
+              {item.email}
             </MenuItem>
           ))}
         </Select>
