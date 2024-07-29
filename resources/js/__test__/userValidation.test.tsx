@@ -1,5 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import UserValidation from '../Components/UserValidation'
+import { ThemeProvider } from '@emotion/react'
+import { createTheme } from '@mui/material'
+import { User } from '@/interfaces/app'
 
 describe('UserValidation Component', () => {
   const defaultProps = {
@@ -10,8 +13,10 @@ describe('UserValidation Component', () => {
     handleSubmit: jest.fn(),
     openError: false,
     setOpenError: jest.fn(),
-    errors: undefined
+    errors: undefined,
+    users: []
   }
+  const theme = createTheme()
 
   test('renders the modal with open state', () => {
     render(<UserValidation {...defaultProps} />)
@@ -62,5 +67,42 @@ describe('UserValidation Component', () => {
     render(<UserValidation {...defaultProps} />)
 
     expect(screen.queryByText('Invalid email address')).not.toBeInTheDocument()
+  })
+
+  test('renders Create Room panel correctly', () => {
+    const props = { ...defaultProps, open: true };
+    render(
+      <ThemeProvider theme={theme}>
+        <UserValidation {...props} />
+      </ThemeProvider>
+    )
+
+    const createRoomTab = screen.getByText('Create Room');
+    fireEvent.click(createRoomTab);
+
+    expect(screen.getByLabelText('Room Name')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Register/i })).toBeInTheDocument();
+  })
+
+  test('calls handleSubmit with correct parameters in Create Room panel', () => {
+    const props = {
+      ...defaultProps,
+      open: true,
+      users: [{ id: 1, name: 'John Doe' } as User],
+    }
+    render(
+      <ThemeProvider theme={theme}>
+        <UserValidation {...props} />
+      </ThemeProvider>
+    )
+
+    // Cambiar a la pestaña "Create Room"
+    fireEvent.click(screen.getByText('Create Room'));
+
+    // Simular la entrada de datos
+    fireEvent.change(screen.getByLabelText('Room Name'), { target: { value: 'New Room' } });
+    fireEvent.click(screen.getByRole('button', { name: /Register/i }))
+
+    expect(defaultProps.handleSubmit).toHaveBeenCalledWith(2, [], 'New Room');
   })
 })

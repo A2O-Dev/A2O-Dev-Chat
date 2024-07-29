@@ -29,7 +29,7 @@ function getStyles (
   personName: string[],
   theme: Theme
 ): {
-    fontWeight: number | string
+    fontWeight: number | string | undefined
   } {
   return {
     fontWeight: !personName.includes(name)
