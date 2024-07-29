@@ -47,6 +47,33 @@ class ChatService
   }
 
   /**
+   * Verify the user's email and return the corresponding chat room.
+   *
+   * @param string
+   * @param array
+   * @return Room
+   */
+  public function createMultiUserRoom(string $name, array $users): Room
+  {
+
+    $currentUser = Auth::user();
+
+    $room = Room::create(['name' => $name]);
+
+    foreach ($users as $user) {
+      $otherUser = User::findOrFail($user);
+      $room->users()->attach([$currentUser->id, $otherUser->id]);
+    }
+    Log::debug('Room created', [
+      'room' => $room,
+      'user_id' => $currentUser->id,
+      'request_ip' => request()->ip()
+    ]);
+
+    return $room;
+  }
+
+  /**
    * Get the rooms associated with the given user.
    *
    * @param User $user
@@ -54,7 +81,7 @@ class ChatService
    */
   public function getUserRooms($user)
   {
-    return $user->rooms()->whereHas('messages')->with([
+    return $user->rooms()->with([
       'messages' => function ($query) {
         $query->latest()->take(1);
       },
@@ -67,6 +94,8 @@ class ChatService
         }
       }
       return $room;
-    });
+    })->unique('id')
+      ->values()
+      ->toArray();
   }
 }

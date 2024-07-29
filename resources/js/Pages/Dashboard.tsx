@@ -1,6 +1,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { FC, useEffect, useState } from 'react'
-import { Box, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from '@mui/material'
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+  useMediaQuery
+} from '@mui/material'
 import ChatList from '@/Components/ChatList'
 import ChatContent from '@/Components/ChatContent'
 import { AddCircle, Menu } from '@mui/icons-material'
@@ -12,28 +19,42 @@ import { DashboardProps, ErrorProps, Room } from '@/interfaces/app'
 import { Theme } from '@mui/material/styles'
 import UserValidation from '@/Components/UserValidation'
 
-const Dashboard: FC<DashboardProps> = ({users, auth, rooms, room, messages }) => {
+const Dashboard: FC<DashboardProps> = ({
+  users,
+  auth,
+  rooms,
+  room,
+  messages
+}) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openError, setOpenError] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
   const [openChatList, setOpenChatList] = useState<boolean>(false)
-  const [selectedChat, setSelectedChat] = useState<number | undefined>(room?.id)
-  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+  const [selectedChat, setSelectedChat] = useState<number | undefined>(
+    room?.id
+  )
+  const isMobile = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down('sm')
+  )
   const user = auth.user
   const { errors } = usePage().props as { errors: ErrorProps }
 
   useEffect(() => {
-    echo.channel('chat')
-      .listen('MessageSent', (e: any) => {
-        const isUserInRooms = rooms.some((r: Room) => r.pivot?.room_id === e.message.room_id)
-        if (e.message.user_id !== user.id && isUserInRooms) {
-          goToChat(room?.id)
-        }
-      })
+    echo.channel('chat').listen('MessageSent', (e: any) => {
+      const isUserInRooms = rooms.some(
+        (r: Room) => r.pivot?.room_id === e.message.room_id
+      )
+      if (e.message.user_id !== user.id && isUserInRooms) {
+        goToChat(room?.id)
+      }
+    })
   }, [room, rooms])
 
   useEffect(() => {
-    if (!isObjectEmpty(errors) && errors?.email !== undefined) {
+    if (
+      !isObjectEmpty(errors) &&
+            (errors?.email !== undefined || errors?.name !== undefined)
+    ) {
       setOpenError(true)
     }
   }, [errors])
@@ -54,17 +75,21 @@ const Dashboard: FC<DashboardProps> = ({users, auth, rooms, room, messages }) =>
   }
 
   const goToChat = (id: number | undefined): void => {
-    router.get(id !== undefined ? `/dashboard/${id}` : '/dashboard/', {}, {
-      preserveState: true,
-      replace: true,
-      onError: (error) => {
-        console.log(error)
+    router.get(
+      id !== undefined ? `/dashboard/${id}` : '/dashboard/',
+      {},
+      {
+        preserveState: true,
+        replace: true,
+        onError: (error) => {
+          console.log(error)
+        }
       }
-    })
+    )
   }
 
   const toggleChatList: () => void = () => {
-    setOpenChatList(prevOpen => !prevOpen)
+    setOpenChatList((prevOpen) => !prevOpen)
   }
 
   const handleCloseModal: () => void = () => {
@@ -73,28 +98,62 @@ const Dashboard: FC<DashboardProps> = ({users, auth, rooms, room, messages }) =>
     setOpenError(false)
   }
 
-  const handleSubmit: () => void = () => {
-    router.post('/verify_user', { email }, {
-      preserveState: true,
-      replace: true,
-      onError: (error) => {
-        console.log(error.email)
-      },
-      onSuccess: (res) => {
-        const responseProps = res.props as { room?: { id: number } }
-        if (responseProps.room?.id !== undefined) {
-          setSelectedChat(responseProps.room.id)
+  const handleSubmit: (
+    operation: number,
+    list?: string[],
+    name?: string
+  ) => void = (operation, emailList = [], roomName = '') => {
+    console.log(operation)
+    if (operation === 1) {
+      router.post(
+        '/verify_user',
+        { email },
+        {
+          preserveState: true,
+          replace: true,
+          onError: (error) => {
+            console.log(error.email)
+          },
+          onSuccess: (res) => {
+            const responseProps = res.props as {
+              room?: { id: number }
+            }
+            if (responseProps.room?.id !== undefined) {
+              setSelectedChat(responseProps.room.id)
+            }
+            setEmail('')
+            setOpen(false)
+          }
         }
-        setEmail('')
-        setOpen(false)
-      }
-    })
+      )
+    } else {
+      router.post(
+        '/create_multiuser_room',
+        { name: roomName, users: emailList },
+        {
+          preserveState: true,
+          replace: true,
+          onError: (error) => {
+            console.log(error)
+          },
+          onSuccess: (res) => {
+            const responseProps = res.props as {
+              room?: { id: number }
+            }
+            if (responseProps.room?.id !== undefined) {
+              setSelectedChat(responseProps.room.id)
+            }
+            setOpen(false)
+          }
+        }
+      )
+    }
   }
 
   return (
     <>
       <UserValidation
-        users={users}
+        users={users.filter((user) => user.id !== auth.user.id)}
         open={open}
         onClose={handleCloseModal}
         email={email}
@@ -104,15 +163,30 @@ const Dashboard: FC<DashboardProps> = ({users, auth, rooms, room, messages }) =>
         setOpenError={setOpenError}
         errors={errors}
       />
-      <AuthenticatedLayout
-        user={auth.user}
-      >
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', maxWidth: '1920px', marginInline: 'auto', backgroundColor: '#fff' }}>
-          <Box sx={{ display: 'flex', height: '80px', width: '100%', boxShadow: 3 }}>
+      <AuthenticatedLayout user={auth.user}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            maxWidth: '1920px',
+            marginInline: 'auto',
+            backgroundColor: '#fff'
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              height: '80px',
+              width: '100%',
+              boxShadow: 3
+            }}
+          >
             <Box
               sx={{
                 width: isMobile ? '100%' : '25%',
-                display: !isMobile || openChatList ? 'flex' : 'none',
+                display:
+                                    !isMobile || openChatList ? 'flex' : 'none',
                 height: '100%',
                 backgroundColor: '#0049A8',
                 justifyContent: 'center',
@@ -121,7 +195,14 @@ const Dashboard: FC<DashboardProps> = ({users, auth, rooms, room, messages }) =>
                 borderBottom: '#002C87 2px solid'
               }}
             >
-              <Box sx={{ color: '#fff', width: '100%', display: 'flex', justifyContent: 'center' }}>
+              <Box
+                sx={{
+                  color: '#fff',
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center'
+                }}
+              >
                 <TextField
                   sx={{
                     backgroundColor: '#5580C5',
@@ -142,14 +223,24 @@ const Dashboard: FC<DashboardProps> = ({users, auth, rooms, room, messages }) =>
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
-                        <SearchIcon sx={{ color: '#fff' }} />
+                        <SearchIcon
+                          sx={{ color: '#fff' }}
+                        />
                       </InputAdornment>
                     )
                   }}
                 />
               </Box>
             </Box>
-            <Box sx={{ width: isMobile ? '100%' : '75%', display: !isMobile || !openChatList ? '' : 'none', height: '100%', backgroundColor: '#EEEEEE' }}>
+            <Box
+              sx={{
+                width: isMobile ? '100%' : '75%',
+                display:
+                                    !isMobile || !openChatList ? '' : 'none',
+                height: '100%',
+                backgroundColor: '#EEEEEE'
+              }}
+            >
               {isMobile && (
                 <IconButton
                   onClick={toggleChatList}
@@ -166,33 +257,73 @@ const Dashboard: FC<DashboardProps> = ({users, auth, rooms, room, messages }) =>
                   textAlign: 'center'
                 }}
               >
-                {rooms?.find(r => r.id === selectedChat)?.name ?? 'New Message'}
+                {rooms?.find((r) => r.id === selectedChat)
+                  ?.name ?? 'New Message'}
               </Typography>
             </Box>
           </Box>
-          <Box sx={{ display: 'flex', height: 'calc(100vh - 80px - 4rem)' }}>
-            <Box sx={{
-              display: openChatList || !isMobile ? 'block' : 'none',
-              position: 'relative',
-              width: { xs: '100%', sm: '25%' },
-              height: '100%',
-              color: '#fff',
-              backgroundColor: '#0049A8',
-              boxShadow: 3,
-              overflowY: 'auto'
+          <Box
+            sx={{
+              display: 'flex',
+              height: 'calc(100vh - 80px - 4rem)'
             }}
+          >
+            <Box
+              sx={{
+                display:
+                                    openChatList || !isMobile
+                                      ? 'block'
+                                      : 'none',
+                position: 'relative',
+                width: { xs: '100%', sm: '25%' },
+                height: '100%',
+                color: '#fff',
+                backgroundColor: '#0049A8',
+                boxShadow: 3,
+                overflowY: 'auto'
+              }}
             >
-              <ChatList rooms={rooms} selected={selectedChat} onSelectChat={handleSelectChat} />
+              <ChatList
+                rooms={rooms}
+                selected={selectedChat}
+                onSelectChat={handleSelectChat}
+              />
 
-              <IconButton onClick={() => setOpen(true)} sx={{ position: 'absolute', left: 10, bottom: 10 }}>
-                <AddCircle sx={{ color: '#fff', width: '60px', height: '60px' }} />
+              <IconButton
+                onClick={() => setOpen(true)}
+                sx={{
+                  position: 'absolute',
+                  left: 10,
+                  bottom: 10
+                }}
+              >
+                <AddCircle
+                  sx={{
+                    color: '#fff',
+                    width: '60px',
+                    height: '60px'
+                  }}
+                />
               </IconButton>
-
             </Box>
-            <Box sx={{ width: openChatList || !isMobile ? '75%' : '100%', display: openChatList && isMobile ? 'none' : 'block' }}>
-              {(selectedChat !== null && selectedChat !== undefined)
-                ? <ChatContent messages={messages} room={room} />
-                : <Typography align='center' padding={2}>Select a Chat</Typography>}
+            <Box
+              sx={{
+                width:
+                                    openChatList || !isMobile ? '75%' : '100%',
+                display:
+                                    openChatList && isMobile ? 'none' : 'block'
+              }}
+            >
+              {selectedChat !== null &&
+                            selectedChat !== undefined
+                ? (
+                  <ChatContent messages={messages} room={room} />
+                  )
+                : (
+                  <Typography align='center' padding={2}>
+                    Select a Chat
+                  </Typography>
+                  )}
             </Box>
           </Box>
         </Box>

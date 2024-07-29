@@ -1,70 +1,76 @@
-import { Theme, useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useState } from 'react';
-import { Box } from '@mui/material';
-import { User } from '@/interfaces/app';
+import { Theme, useTheme } from '@mui/material/styles'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { Box } from '@mui/material'
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
 const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
+      width: 250
+    }
+  }
+}
 
 interface MultipleSelectProps {
-    list: User[],
-    label: string
+  list: any[]
+  label: string
+  selected: string[]
+  setSelected: (val: string[]) => void
 }
 
-function getStyles(name: string, personName: string[], theme: Theme) {
+function getStyles (
+  name: string,
+  personName: string[],
+  theme: Theme
+): {
+    fontWeight: number | string
+  } {
   return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
+    fontWeight: !personName.includes(name)
+      ? theme.typography.fontWeightRegular
+      : theme.typography.fontWeightMedium
+  }
 }
 
-function MultipleSelect({ list, label }: MultipleSelectProps) {
-  const theme = useTheme();
-  const [personName, setPersonName] = useState<string[]>([]);
+const MultipleSelect: React.FC<MultipleSelectProps> = ({
+  list,
+  label,
+  selected,
+  setSelected
+}: MultipleSelectProps) => {
+  const theme = useTheme()
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+  const handleChange = (event: SelectChangeEvent<typeof selected>): void => {
     const {
-      target: { value },
-    } = event;
-    setPersonName(
-      typeof value === 'string' ? value.split(',') : value
-    );
-  };
+      target: { value }
+    } = event
+    setSelected(typeof value === 'string' ? value.split(',') : value)
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
       <FormControl sx={{ width: '100%' }}>
-        <InputLabel id="demo-multiple-name-label">{label}</InputLabel>
+        <InputLabel id='demo-multiple-name-label'>{label}</InputLabel>
         <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
+          labelId='demo-multiple-name-label'
+          id='demo-multiple-name'
           multiple
-          value={personName}
+          value={selected}
           onChange={handleChange}
-          input={<OutlinedInput label="Name" />}
+          input={<OutlinedInput label='Name' />}
           MenuProps={MenuProps}
         >
           {list.map((item) => (
             <MenuItem
               key={item.id}
               value={item.id}
-              style={getStyles(item.email, personName, theme)}
+              style={getStyles(item.email, selected, theme)}
             >
               {item.email}
             </MenuItem>
@@ -72,7 +78,7 @@ function MultipleSelect({ list, label }: MultipleSelectProps) {
         </Select>
       </FormControl>
     </Box>
-  );
+  )
 }
 
 export default MultipleSelect
