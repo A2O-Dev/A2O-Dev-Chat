@@ -45,7 +45,6 @@ class ChatController extends Controller
   {
     $user = Auth::user();
     $rooms = $this->chatService->getUserRooms($user);
-    Log::info($rooms);
 
     $data = [
       'users' => User::all(),
@@ -82,7 +81,7 @@ class ChatController extends Controller
    * Create a multi user room and redirect to the corresponding chat room.
    *
    * @param CreateMultiUserRoomRequest $request
-   * @return \Illuminate\Http\RedirectResponse
+   * @return RedirectResponse
    */
   public function createMultiUserRoom(CreateMultiUserRoomRequest $request)
   {

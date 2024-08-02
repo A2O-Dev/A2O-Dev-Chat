@@ -77,7 +77,7 @@ class ChatService
    * Get the rooms associated with the given user.
    *
    * @param User $user
-   * @return \Illuminate\Support\Collection
+   * @return Collection
    */
   public function getUserRooms($user)
   {
@@ -91,6 +91,10 @@ class ChatService
         $otherUser = $room->users->firstWhere('id', '!=', $user->id);
         if ($otherUser) {
           $room->name = $otherUser->name;
+        }
+
+        if ($room->messages->isEmpty()) {
+          return null;
         }
       }
       return $room;
