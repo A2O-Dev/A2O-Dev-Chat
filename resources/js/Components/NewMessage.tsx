@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab'
 import CustomTabPanel from './CustomTabPanel'
 import MultipleSelect from './MultipleSelect'
 
-interface UserValidationProps {
+interface NewMessageProps {
   open: boolean
   onClose: () => void
   email: string
@@ -24,7 +24,7 @@ function a11yProps (index: number): any {
     'aria-controls': `simple-tabpanel-${index}`
   }
 }
-const UserValidation: FC<UserValidationProps> = ({
+const NewMessage: FC<NewMessageProps> = ({
   users,
   open,
   onClose,
@@ -171,4 +171,4 @@ const UserValidation: FC<UserValidationProps> = ({
   )
 }
 
-export default UserValidation
+export default NewMessage
