@@ -60,9 +60,11 @@ class ChatService
 
     $room = Room::create(['name' => $name]);
 
+    $room->users()->attach($currentUser->id);
+
     foreach ($users as $user) {
       $otherUser = User::findOrFail($user);
-      $room->users()->attach([$currentUser->id, $otherUser->id]);
+      $room->users()->attach($otherUser->id);
     }
     Log::debug('Room created', [
       'room' => $room,
@@ -81,20 +83,21 @@ class ChatService
    */
   public function getUserRooms($user)
   {
-    return $user->rooms()->with([
-      'messages' => function ($query) {
-        $query->latest()->take(1);
-      },
-      'users'
+    return $user->rooms()
+      ->where(function ($query) {
+        $query->whereHas('messages')
+              ->orWhere('is_direct_message', false);
+    })
+      ->with([
+        'messages' => function ($query) {
+          $query->latest()->take(1);
+        },
+        'users'
     ])->get()->map(function ($room) use ($user) {
       if ($room->is_direct_message) {
         $otherUser = $room->users->firstWhere('id', '!=', $user->id);
         if ($otherUser) {
           $room->name = $otherUser->name;
-        }
-
-        if ($room->messages->isEmpty()) {
-          return null;
         }
       }
       return $room;
