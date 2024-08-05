@@ -28,7 +28,6 @@ const Dashboard: FC<DashboardProps> = ({
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openError, setOpenError] = useState<boolean>(false)
-  const [email, setEmail] = useState<string>('')
   const [openChatList, setOpenChatList] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | undefined>(
     room?.id
@@ -94,59 +93,7 @@ const Dashboard: FC<DashboardProps> = ({
 
   const handleCloseModal: () => void = () => {
     setOpen(false)
-    setEmail('')
     setOpenError(false)
-  }
-
-  const handleSubmit: (
-    operation: number,
-    list?: string[],
-    name?: string
-  ) => void = (operation, emailList = [], roomName = '') => {
-    if (operation === 1) {
-      router.post(
-        '/verify_user',
-        { email },
-        {
-          preserveState: true,
-          replace: true,
-          onError: (error) => {
-            console.log(error.email)
-          },
-          onSuccess: (res) => {
-            const responseProps = res.props as {
-              room?: { id: number }
-            }
-            if (responseProps.room?.id !== undefined) {
-              setSelectedChat(responseProps.room.id)
-            }
-            setEmail('')
-            setOpen(false)
-          }
-        }
-      )
-    } else {
-      router.post(
-        '/create_multiuser_room',
-        { name: roomName, users: emailList },
-        {
-          preserveState: true,
-          replace: true,
-          onError: (error) => {
-            console.log(error)
-          },
-          onSuccess: (res) => {
-            const responseProps = res.props as {
-              room?: { id: number }
-            }
-            if (responseProps.room?.id !== undefined) {
-              setSelectedChat(responseProps.room.id)
-            }
-            setOpen(false)
-          }
-        }
-      )
-    }
   }
 
   return (
@@ -155,9 +102,7 @@ const Dashboard: FC<DashboardProps> = ({
         users={users.filter((user) => user.id !== auth.user.id)}
         open={open}
         onClose={handleCloseModal}
-        email={email}
-        setEmail={setEmail}
-        handleSubmit={handleSubmit}
+        setSelectedChat={setSelectedChat}
         openError={openError}
         setOpenError={setOpenError}
         errors={errors}
