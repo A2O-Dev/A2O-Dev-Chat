@@ -1,3 +1,5 @@
+import { ChangeEvent } from "react"
+
 export interface User {
   created_at: string
   email: string
@@ -28,7 +30,7 @@ export interface Room {
   }
   messages?: Message[]
   updated_at: string
-  notifications?: number | undefined
+  notifications?: number
 }
 
 export interface Auth {
@@ -45,4 +47,15 @@ export interface DashboardProps {
   rooms: Room[]
   room?: Room
   messages: Message[]
+}
+
+export interface EmailValidationBody {
+  email: string
+}
+
+export interface EmailValidationProps {
+  form: EmailValidationBody,
+  onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
+  handleSubmit: (option: number, list?: string[], name?: string) => void,
+  errors?: ErrorProps
 }
