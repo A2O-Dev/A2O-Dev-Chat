@@ -14,7 +14,6 @@ import { AddCircle, Menu } from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
 import { router, usePage } from '@inertiajs/react'
 import echo from '../services/echo'
-import { isObjectEmpty } from '@/utils/isObjectEmpty'
 import { DashboardProps, ErrorProps, Room } from '@/interfaces/app'
 import { Theme } from '@mui/material/styles'
 import NewMessage from '@/Components/NewMessage'
@@ -27,7 +26,6 @@ const Dashboard: FC<DashboardProps> = ({
   messages
 }) => {
   const [open, setOpen] = useState<boolean>(false)
-  const [openError, setOpenError] = useState<boolean>(false)
   const [openChatList, setOpenChatList] = useState<boolean>(false)
   const [selectedChat, setSelectedChat] = useState<number | undefined>(
     room?.id
@@ -48,15 +46,6 @@ const Dashboard: FC<DashboardProps> = ({
       }
     })
   }, [room, rooms])
-
-  useEffect(() => {
-    if (
-      !isObjectEmpty(errors) &&
-            (errors?.email !== undefined || errors?.name !== undefined)
-    ) {
-      setOpenError(true)
-    }
-  }, [errors])
 
   useEffect(() => {
     if (!isMobile) {
@@ -93,7 +82,6 @@ const Dashboard: FC<DashboardProps> = ({
 
   const handleCloseModal: () => void = () => {
     setOpen(false)
-    setOpenError(false)
   }
 
   return (
@@ -103,8 +91,6 @@ const Dashboard: FC<DashboardProps> = ({
         open={open}
         onClose={handleCloseModal}
         setSelectedChat={setSelectedChat}
-        openError={openError}
-        setOpenError={setOpenError}
         errors={errors}
       />
       <AuthenticatedLayout user={auth.user}>
