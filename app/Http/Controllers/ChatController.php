@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
+use App\Http\Requests\CreateMultiUserRoomRequest;
 use App\Http\Requests\SendMessageRequest;
 use App\Http\Requests\VerifyUserRequest;
 use App\Models\Message;
 use App\Models\Room;
+use App\Models\User;
 use App\Services\ChatService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -45,6 +47,7 @@ class ChatController extends Controller
     $rooms = $this->chatService->getUserRooms($user);
 
     $data = [
+      'users' => User::all(),
       'rooms' => $rooms,
       'messages' => $room ? $room->messages()->with('user')->get() : [],
       'room' => $room ?? []
@@ -73,6 +76,28 @@ class ChatController extends Controller
       return back()->withErrors(['email' => 'User not found']);
     }
   }
+
+  /**
+   * Create a multi user room and redirect to the corresponding chat room.
+   *
+   * @param CreateMultiUserRoomRequest $request
+   * @return RedirectResponse
+   */
+  public function createMultiUserRoom(CreateMultiUserRoomRequest $request)
+  {
+    try {
+      $room = $this->chatService->createMultiUserRoom($request->input('name'), $request->input('users'));
+      return redirect()->route('dashboard', ['room' => $room->id]);
+    } catch (Exception $e) {
+      Log::error('Error creating room', [
+        'exception' => $e->getMessage(),
+        'user_id' => auth()->user()->id ?? 'guest',
+        'request_ip' => request()->ip()
+      ]);
+      return back()->withErrors(['room' => $e->getMessage()]);
+    }
+  }
+
 
   /**
    * Send a message to a chat room.

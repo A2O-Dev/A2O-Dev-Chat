@@ -14,8 +14,7 @@ class ChatControllerTest extends TestCase
 {
   use RefreshDatabase;
 
-  /** @test */
-  public function it_verifies_a_user_and_redirects_to_dashboard()
+  public function test_it_verifies_a_user_and_redirects_to_dashboard()
   {
     // Given
     $user = User::factory()->create();
@@ -35,8 +34,7 @@ class ChatControllerTest extends TestCase
     $response->assertRedirect(route('dashboard', ['room' => $room->id]));
   }
 
-  /** @test */
-  public function it_shows_error_if_user_verification_fails()
+  public function test_it_shows_error_if_user_verification_fails()
   {
     // Given
     $user = User::factory()->create();
@@ -92,4 +90,19 @@ class ChatControllerTest extends TestCase
     $response->assertStatus(422);
     $response->assertJsonValidationErrors(['message', 'room_id', 'user_id']);
   }
+
+  public function test_it_creates_a_new_room_with_many_users_and_redirects_to_dashboard()
+  {
+    // Given
+    $user = User::factory()->create();
+    $userOne = User::factory()->create();
+    $userTwo = User::factory()->create();
+    Auth::login($user);
+
+    // When
+    $response = $this->post('/create_multiuser_room', ['name' => 'room1', 'users' => [$userOne->id, $userTwo->id]]);
+    // Then
+    $response->assertRedirect(route('dashboard', ['room' => 1]));
+  }
+
 }

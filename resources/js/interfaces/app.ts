@@ -1,3 +1,5 @@
+import { ChangeEvent } from 'react'
+
 export interface User {
   created_at: string
   email: string
@@ -28,7 +30,7 @@ export interface Room {
   }
   messages?: Message[]
   updated_at: string
-  notifications?: number | undefined
+  notifications?: number
 }
 
 export interface Auth {
@@ -40,8 +42,45 @@ export interface ErrorProps {
 }
 
 export interface DashboardProps {
+  users: User[]
   auth: Auth
   rooms: Room[]
   room?: Room
   messages: Message[]
+}
+
+export interface NewMessageProps {
+  open: boolean
+  onClose: () => void
+  setSelectedChat: (n: number) => void
+  errors: ErrorProps | undefined
+  users: User[]
+}
+
+export interface EmailValidationBody {
+  email: string
+}
+
+export interface EmailValidationProps {
+  form: EmailValidationBody
+  onChange: (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void
+  handleSubmit: (option: number, list?: string[], name?: string) => void
+  errors?: ErrorProps
+}
+
+export interface NewRoomBody {
+  name: string
+  users?: string[]
+}
+
+export interface NewRoomProps {
+  form: NewRoomBody
+  onChange: (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void
+  handleSubmit: (option: number, list?: string[], name?: string) => void
+  users: User[]
+  errors?: ErrorProps
 }

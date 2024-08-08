@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::get('/dashboard/{room?}', [ChatController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::post('/message', [ChatController::class, 'sendMessage'])->middleware(['auth', 'verified']);
 Route::post('/verify_user', [ChatController::class, 'verifyUser'])->middleware(['auth', 'verified']);
+Route::post('/create_multiuser_room', [ChatController::class, 'createMultiUserRoom'])->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
