@@ -11,6 +11,12 @@ const NewRoom: FC<NewRoomProps> = ({
   errors
 }) => {
   const [selected, setSelected] = useState<string[]>([])
+
+  const handleRegister = (): void => {
+    form.users = selected
+    handleSubmit(2)
+  }
+
   return (
     <Box
       sx={{
@@ -39,7 +45,7 @@ const NewRoom: FC<NewRoomProps> = ({
       />
       <Button
         variant='outlined'
-        onClick={() => handleSubmit(2, selected, form?.name)}
+        onClick={handleRegister}
         sx={{
           bgcolor: '#0049A8',
           color: '#fff',
@@ -51,16 +57,6 @@ const NewRoom: FC<NewRoomProps> = ({
       >
         Register
       </Button>
-      {/* openError && (
-              <Alert
-                onClose={() => setOpenError(false)}
-                severity='error'
-                variant='filled'
-                sx={{ width: '100%' }}
-              >
-                {errors?.name}
-              </Alert>
-            ) */}
     </Box>
   )
 }

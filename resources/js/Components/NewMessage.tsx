@@ -29,7 +29,8 @@ const NewMessage: FC<NewMessageProps> = ({
   const { form: emailForm, onChange: emailOnChange } =
     useForm<EmailValidationBody>({ email: '' })
   const { form: roomForm, onChange: roomOnChange } = useForm<NewRoomBody>({
-    name: ''
+    name: '',
+    users: []
   })
   const [tabValue, setTabValue] = useState(0)
 
@@ -40,53 +41,60 @@ const NewMessage: FC<NewMessageProps> = ({
     setTabValue(newValue)
   }
 
+  const verifyEmail = (form: EmailValidationBody): void => {
+    router.post(
+      '/verify_user',
+      { ...form },
+      {
+        preserveState: true,
+        replace: true,
+        onError: (error) => {
+          console.log(error.email)
+        },
+        onSuccess: (res) => {
+          const responseProps = res.props as {
+            room?: { id: number }
+          }
+          if (responseProps.room?.id !== undefined) {
+            setSelectedChat(responseProps.room.id)
+          }
+          onClose()
+        }
+      }
+    )
+  }
+
+  const newRoom = (form: NewRoomBody): void => {
+    router.post(
+      '/create_multiuser_room',
+      { ...form },
+      {
+        preserveState: true,
+        replace: true,
+        onError: (error) => {
+          console.log(error)
+        },
+        onSuccess: (res) => {
+          const responseProps = res.props as {
+            room?: { id: number }
+          }
+          if (responseProps.room?.id !== undefined) {
+            setSelectedChat(responseProps.room.id)
+          }
+          onClose()
+        }
+      }
+    )
+  }
+
   const handleSubmit: (
-    operation: number,
-    list?: string[],
-    name?: string
-  ) => void = (operation, emailList = [], roomName = '') => {
+    operation: number
+  ) => void = (operation) => {
     if (operation === 1) {
-      router.post(
-        '/verify_user',
-        { email: emailForm?.email },
-        {
-          preserveState: true,
-          replace: true,
-          onError: (error) => {
-            console.log(error.email)
-          },
-          onSuccess: (res) => {
-            const responseProps = res.props as {
-              room?: { id: number }
-            }
-            if (responseProps.room?.id !== undefined) {
-              setSelectedChat(responseProps.room.id)
-            }
-            onClose()
-          }
-        }
-      )
-    } else {
-      router.post(
-        '/create_multiuser_room',
-        { name: roomName, users: emailList },
-        {
-          preserveState: true,
-          replace: true,
-          onError: (error) => {
-            console.log(error)
-          },
-          onSuccess: (res) => {
-            const responseProps = res.props as {
-              room?: { id: number }
-            }
-            if (responseProps.room?.id !== undefined) {
-              setSelectedChat(responseProps.room.id)
-            }
-            onClose()
-          }
-        }
-      )
+      verifyEmail(emailForm)
+    }
+    if (operation === 2) {
+      newRoom(roomForm)
     }
   }
 
