@@ -55,22 +55,13 @@ class ChatService
      */
     public function getUserRooms($user)
     {
-        return $user->rooms()->whereHas('messages')->with([
+        $rooms = $user->rooms()->whereHas('messages')->with([
             'messages' => function ($query) {
                 $query->latest()->take(1);
             },
             'users'
-        ])->get()->map(function ($room) use ($user) {
-            if ($room->is_direct_message) {
-                $otherUser = $room->users->firstWhere('id', '!=', $user->id);
-                if ($otherUser) {
-                    $room->name = $otherUser->name;
-                }
-            }
-            return $room;
-        })
-            ->unique('id')
-            ->values();
+        ])->get();
+        return $this->changeRoomName($rooms, $user);
     }
 
     /**
@@ -96,9 +87,10 @@ class ChatService
 
     /**
      * @param $query
+     * @param User $user
      * @return array
      */
-    public function searchByUser($query)
+    public function searchByUser($query,User $user)
     {
         $rooms = Room::where('is_direct_message', 1)
             ->whereHas('users', function ($q) use ($query) {
@@ -110,19 +102,19 @@ class ChatService
             }])
             ->get();
 
-        return $rooms->isEmpty() ? [] : $rooms;
+        return $this->changeRoomName($rooms, $user);
     }
 
     /**
-     * @param $user
+     * @param User $user
      * @param $query
      * @return Collection
      */
-    public function handleSearch($user, $query)
+    public function handleSearch(User $user, $query)
     {
         if ($query) {
             $searchedMessages = collect($this->searchByMessages($query));
-            $searchedUsers = collect($this->searchByUser($query));
+            $searchedUsers = collect($this->searchByUser($query, $user));
             return $searchedMessages->merge($searchedUsers)->unique('id');
         }
 
@@ -142,4 +134,23 @@ class ChatService
         return collect([]);
     }
 
+    /**
+     * @param $rooms
+     * @param User $user
+     * @return mixed
+     */
+    private function changeRoomName($rooms, User $user)
+    {
+        return $rooms->map(function ($room) use ($user) {
+            if ($room->is_direct_message) {
+                $otherUser = $room->users->firstWhere('id', '!=', $user->id);
+                if ($otherUser) {
+                    $room->name = $otherUser->name;
+                }
+            }
+            return $room;
+        })
+            ->unique('id')
+            ->values();
+    }
 }
