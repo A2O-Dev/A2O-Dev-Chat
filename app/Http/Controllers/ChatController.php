@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class ChatController extends Controller
 {
@@ -38,27 +39,17 @@ class ChatController extends Controller
    * Display the chat dashboard.
    *
    * @param Room|null $room The room to display messages for.
-   * @return \Inertia\Response
+   * @return Response
    */
     public function index(Room $room = null, Request $request)
     {
-        $searchedMessages = collect([]);
-        $searchedUsers = collect([]);
-
-        if ($request->has('search') && !empty($request->input('search'))) {
-            $query = $request->input('search');
-            $searchedMessages = collect($this->chatService->searchByMessages($query));
-            $searchedUsers = collect($this->chatService->searchByUser($query));
-        }
-
         $user = Auth::user();
-        $rooms = $this->chatService->getUserRooms($user);
-
-        $results = $searchedMessages->merge($searchedUsers)->unique('id');
+        $rooms = $this->chatService->handleSearch($user, $request->input('search'));
+        $messages = $this->chatService->getRoomMessages($room);
 
         $data = [
-            'rooms' => $request->has('search') && !empty($request->input('search')) ? $results : $rooms,
-            'messages' => $room ? $room->messages()->with('user')->get() : [],
+            'rooms' => $rooms,
+            'messages' => $messages,
             'room' => $room ?? []
         ];
 

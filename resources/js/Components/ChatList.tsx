@@ -6,13 +6,13 @@ import { Room } from '../interfaces/app'
 interface ChatListProps {
   selected: number | undefined
   onSelectChat: (id: number) => void
-  rooms: Room[]
+  rooms?: Room[]
 }
 
-const ChatList: FC<ChatListProps> = ({ rooms, selected, onSelectChat }) => {
+const ChatList: FC<ChatListProps> = ({ rooms = [], selected, onSelectChat }) => {
   return (
     <List>
-      {rooms.map(room => (
+      {rooms?.map(room => (
         <ChatItem key={room.id} room={room} onSelect={() => onSelectChat(room.id)} isActive={selected === room.id} />
       ))}
     </List>

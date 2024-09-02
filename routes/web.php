@@ -5,32 +5,6 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
-
-Route::get('/search', function (Request $request) {
-    $query = $request->input('query');
-
-    $messages = \App\Models\Room::whereHas('messages', function ($q) use ($query) {
-        $q->where('message', 'like', '%' . $query . '%');
-    })->with(['messages' => function ($q) use ($query) {
-        $q->where('message', 'like', '%' . $query . '%')->with('user', 'room')->get();
-    }, 'messages.user'])
-    ->get();
-
-    $rooms = \App\Models\Room::where('is_direct_message', 1)
-        ->whereHas('users', function($q) use ($query) {
-            $q->where('name', 'like', '%' . $query . '%');
-        })
-        ->with(['messages' => function ($q) {
-            $q->latest()->take(1)->with('user', 'room');
-        }])
-        ->get();
-
-    //$results = $messages->merge($users)->unique('id');
-
-    return response()->json(['query' => $rooms]);
-});
-
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

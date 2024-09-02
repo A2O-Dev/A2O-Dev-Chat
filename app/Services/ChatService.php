@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Room;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -50,7 +51,7 @@ class ChatService
      * Get the rooms associated with the given user.
      *
      * @param User $user
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getUserRooms($user)
     {
@@ -67,33 +68,78 @@ class ChatService
                 }
             }
             return $room;
-        });
+        })
+            ->unique('id')
+            ->values();
     }
 
+    /**
+     * @param $query
+     * @return array
+     */
     public function searchByMessages($query)
     {
         $messages = Room::whereHas('messages', function ($q) use ($query) {
             $q->where('message', 'like', '%' . $query . '%');
-        })->with(['messages' => function ($q) use ($query) {
-            $q->where('message', 'like', '%' . $query . '%')->with('user', 'room');
-        }, 'messages.user'])
-            ->get();
+        })
+            ->whereHas('messages')
+            ->with(['messages' => function ($q) use ($query) {
+                $q->where('message', 'like', '%' . $query . '%')
+                    ->with('user', 'room')
+                    ->limit(1);
+            }])
+            ->get()
+            ->unique('id');
 
         return $messages->isEmpty() ? [] : $messages;
     }
 
+    /**
+     * @param $query
+     * @return array
+     */
     public function searchByUser($query)
     {
         $rooms = Room::where('is_direct_message', 1)
             ->whereHas('users', function ($q) use ($query) {
                 $q->where('name', 'like', '%' . $query . '%');
             })
+            ->whereHas('messages')
             ->with(['messages' => function ($q) {
                 $q->latest()->take(1)->with('user', 'room');
             }])
             ->get();
 
         return $rooms->isEmpty() ? [] : $rooms;
+    }
+
+    /**
+     * @param $user
+     * @param $query
+     * @return Collection
+     */
+    public function handleSearch($user, $query)
+    {
+        if ($query) {
+            $searchedMessages = collect($this->searchByMessages($query));
+            $searchedUsers = collect($this->searchByUser($query));
+            return $searchedMessages->merge($searchedUsers)->unique('id');
+        }
+
+        return $this->getUserRooms($user);
+    }
+
+    /**
+     * @param Room|null $room
+     * @return \Illuminate\Database\Eloquent\Collection|Collection
+     */
+    public function getRoomMessages(Room $room = null)
+    {
+        if ($room) {
+            return $room->messages()->with('user')->get();
+        }
+
+        return collect([]);
     }
 
 }
