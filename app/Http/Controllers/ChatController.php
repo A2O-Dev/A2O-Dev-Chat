@@ -41,7 +41,7 @@ class ChatController extends Controller
    * @param Room|null $room The room to display messages for.
    * @return Response
    */
-    public function index(Room $room = null, Request $request)
+    public function index(Request $request, Room $room = null)
     {
         $user = Auth::user();
         $rooms = $this->chatService->handleSearch($user, $request->input('search'));
