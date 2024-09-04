@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { FC, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { Box, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from '@mui/material'
 import ChatList from '@/Components/ChatList'
 import ChatContent from '@/Components/ChatContent'
@@ -53,8 +53,8 @@ const Dashboard: FC<DashboardProps> = ({ auth, rooms, room, messages }) => {
     }
   }
 
-  const goToChat = (id: number | undefined): void => {
-    router.get(id !== undefined ? `/dashboard/${id}` : '/dashboard/', {}, {
+  const goToChat = (id: number | undefined, data = {}): void => {
+    router.get(id !== undefined ? `/dashboard/${id}` : '/dashboard/', data, {
       preserveState: true,
       replace: true,
       onError: (error) => {
@@ -90,7 +90,9 @@ const Dashboard: FC<DashboardProps> = ({ auth, rooms, room, messages }) => {
       }
     })
   }
-
+  const handleSubmitSearch = (e: ChangeEvent<HTMLInputElement>): void => {
+    goToChat(room?.id, { search: e.target.value })
+  }
   return (
     <>
       <UserValidation
@@ -138,6 +140,7 @@ const Dashboard: FC<DashboardProps> = ({ auth, rooms, room, messages }) => {
                   }}
                   variant='outlined'
                   placeholder='Search...'
+                  onChange={handleSubmitSearch}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>

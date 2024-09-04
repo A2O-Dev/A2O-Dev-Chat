@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use Inertia\Response;
 
 class ChatController extends Controller
 {
@@ -37,21 +39,22 @@ class ChatController extends Controller
    * Display the chat dashboard.
    *
    * @param Room|null $room The room to display messages for.
-   * @return \Inertia\Response
+   * @return Response
    */
-  public function index(Room $room = null)
-  {
-    $user = Auth::user();
-    $rooms = $this->chatService->getUserRooms($user);
+    public function index(Request $request, Room $room = null)
+    {
+        $user = Auth::user();
+        $rooms = $this->chatService->handleSearch($user, $request->input('search'));
+        $messages = $this->chatService->getRoomMessages($room);
 
-    $data = [
-      'rooms' => $rooms,
-      'messages' => $room ? $room->messages()->with('user')->get() : [],
-      'room' => $room ?? []
-    ];
+        $data = [
+            'rooms' => $rooms,
+            'messages' => $messages,
+            'room' => $room ?? []
+        ];
 
-    return Inertia::render('Dashboard', $data);
-  }
+        return Inertia::render('Dashboard', $data);
+    }
 
   /**
    * Verify a user's email address and redirect to the corresponding chat room.

@@ -28,7 +28,7 @@ export interface Room {
   }
   messages?: Message[]
   updated_at: string
-  notifications?: number | undefined
+  notifications?: number
 }
 
 export interface Auth {
